@@ -2,7 +2,7 @@
 <html lang="cs">
 <head>
     <meta charset="UTF-8">
-    <title>Generátor smlouvy</title>
+    <title>Generátor smlouvy o dílo</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -27,7 +27,7 @@
             margin-top: 1em;
             font-weight: bold;
         }
-        input {
+        input, select {
             width: 100%;
             padding: 0.6em;
             margin-top: 0.3em;
@@ -49,7 +49,7 @@
             background-color: #1d4ed8;
         }
         .success {
-            margin-top: 1em;
+            margin-top: 1.5em;
             padding: 1em;
             background-color: #e0fce0;
             border: 1px solid #a0d0a0;
@@ -59,8 +59,15 @@
 </head>
 <body>
     <div class="container">
-        <h1>Generátor smlouvy o dílo</h1>
+        <h1>Generátor smlouvy</h1>
         <form method="post">
+            <label for="sablona">Typ smlouvy</label>
+            <select name="sablona" required>
+                <option value="smlouva_o_dilo">Smlouva o dílo</option>
+                <option value="dodatkova_smlouva">Dodatková smlouva</option>
+                <!-- Přidej další typy, pokud chceš -->
+            </select>
+
             <label for="nazev_akce">Název akce</label>
             <input type="text" name="nazev_akce" required>
 
@@ -76,7 +83,7 @@
             <label for="tds">TDS</label>
             <input type="text" name="tds" required>
 
-            <label for="datum">Datum</label>
+            <label for="datum">Datum uzavření</label>
             <input type="date" name="datum" required>
 
             <button type="submit">Vygenerovat smlouvu</button>
@@ -88,6 +95,7 @@
             <a href="{{ download_link }}" target="_blank">Klikněte zde pro stažení</a>
         </div>
         <script>
+            // Otevře odkaz automaticky
             window.open("{{ download_link }}", "_blank");
         </script>
         {% endif %}
