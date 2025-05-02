@@ -18,13 +18,22 @@ def index():
         datum = request.form['datum']
 
         doc = Document('template.docx')
-        for p in doc.paragraphs:
-            p.text = p.text.replace('{{nazev}}', nazev_akce)
-            p.text = p.text.replace('{{cislo}}', cislo_akce)
-            p.text = p.text.replace('{{ID_smlouvy}}', cislo_smlouvy)
-            p.text = p.text.replace('{{objednatel}}', objednatel)
-            p.text = p.text.replace('{{TDS}}', tds)
-            p.text = p.text.replace('{{datum}}', datum)
+# Nahrazení v těle dokumentu
+for p in doc.paragraphs:
+    p.text = p.text.replace('{{nazev}}', nazev_akce)
+    p.text = p.text.replace('{{cislo}}', cislo_akce)
+    p.text = p.text.replace('{{ID_smlouvy}}', cislo_smlouvy)
+    p.text = p.text.replace('{{objednatel}}', objednatel)
+    p.text = p.text.replace('{{TDS}}', tds)
+    p.text = p.text.replace('{{datum}}', datum)
+
+# Nahrazení v zápatí (v každé sekci dokumentu)
+for section in doc.sections:
+    footer = section.footer
+    for p in footer.paragraphs:
+        p.text = p.text.replace('{{nazev}}', nazev_akce)
+        p.text = p.text.replace('{{cislo}}', cislo_akce)
+        p.text = p.text.replace('{{datum}}', datum)
 
         filename = f"smlouva_{uuid.uuid4().hex}.docx"
         filepath = os.path.join(UPLOAD_FOLDER, filename)
