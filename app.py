@@ -20,7 +20,7 @@ def smazat_stare_smlouvy(cesta, max_stari_dni=7):
             if cas_zmeny < threshold:
                 os.remove(filepath)
 
-# Nahrazení textu napříč runy
+# Nahrazení v paragrafech (sloučený text z runů)
 def nahrad_v_paragrafech(paragraphs, nahrady):
     for p in paragraphs:
         full_text = ''.join(run.text for run in p.runs)
@@ -30,6 +30,13 @@ def nahrad_v_paragrafech(paragraphs, nahrady):
         if full_text:
             p.clear()
             p.add_run(full_text)
+
+# Nahrazení v tabulkách
+def nahrad_v_tabulkach(tables, nahrady):
+    for table in tables:
+        for row in table.rows:
+            for cell in row.cells:
+                nahrad_v_paragrafech(cell.paragraphs, nahrady)
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
@@ -60,8 +67,11 @@ def index():
 
         doc = Document(sablona_path)
         nahrad_v_paragrafech(doc.paragraphs, nahrady)
+        nahrad_v_tabulkach(doc.tables, nahrady)
+
         for section in doc.sections:
             nahrad_v_paragrafech(section.footer.paragraphs, nahrady)
+            nahrad_v_tabulkach(section.footer.tables, nahrady)
 
         filename = f"{sablona}_{uuid.uuid4().hex}.docx"
         filepath = os.path.join(UPLOAD_FOLDER, filename)
