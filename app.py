@@ -26,14 +26,14 @@ def nahrad_v_paragrafech(paragraphs, nahrady):
         for run in p.runs:
             for klic, hodnota in nahrady.items():
                 if klic in run.text:
-                    run.text = run.text.replace(klic, hodnota)
+                    run.text = run.text.replace(klic, str(hodnota))  # Ensure replacement with string
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
     if request.method == 'POST':
         smazat_stare_smlouvy(UPLOAD_FOLDER)
 
-        # Načtení dat z formuláře (opraveno s podtržítky)
+        # Načtení dat z formuláře
         nazev_akce = request.form['nazev_akce']
         cislo_akce = request.form['cislo_akce']
         vedouci = request.form['vedouci']
