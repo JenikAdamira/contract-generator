@@ -34,23 +34,22 @@ def index():
         smazat_stare_smlouvy(UPLOAD_FOLDER)
 
         # Načtení dat
-        nazev_akce = request.form['nazev_akce']
-        cislo_akce = request.form['cislo_akce']
+        nazev-akce = request.form['nazev-akce']
+        cislo-akce = request.form['cislo-akce']
         cislo_smlouvy = request.form['cislo_smlouvy']
-        objednatel = request.form['objednatel']
+        vedouci = request.form['vedouci']
         tds = request.form['tds']
-        datum_input = request.form['datum']
+        datum_input = request.form['zahajeni']
         sablona = request.form['sablona']
 
         datum = datetime.strptime(datum_input, '%Y-%m-%d').strftime('%d. %m. %Y')
 
         nahrady = {
-            '{{nazev}}': nazev_akce,
-            '{{cislo}}': cislo_akce,
-            '{{ID_smlouvy}}': cislo_smlouvy,
-            '{{objednatel}}': objednatel,
+            '{{nazev-akce}}': nazev-akce,
+            '{{cislo-akce}}': cislo-akce,
+            '{{vedouci}}': vedouci,
             '{{TDS}}': tds,
-            '{{datum}}': datum
+            '{{zahajeni}}': datum
         }
 
         sablona_path = os.path.join(SABLONY_FOLDER, sablona + '.docx')
@@ -71,12 +70,11 @@ def index():
             download_link='/' + filepath,
             data={
                 'sablona': sablona,
-                'nazev_akce': nazev_akce,
-                'cislo_akce': cislo_akce,
-                'cislo_smlouvy': cislo_smlouvy,
-                'objednatel': objednatel,
+                'nazev-akce': nazev-akce,
+                'cislo-akce': cislo-akce,
+                'vedouci': vedouci,
                 'tds': tds,
-                'datum': datum_input
+                'zahajeni': datum_input
             }
         )
 
