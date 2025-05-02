@@ -2,95 +2,21 @@
 <html lang="cs">
 <head>
     <meta charset="UTF-8">
-    <title>Generátor smlouvy</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f3f4f6;
-            padding: 2em;
-            color: #111;
-        }
-        .container {
-            max-width: 600px;
-            margin: auto;
-            background: white;
-            padding: 2em;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-        }
-        h1 {
-            text-align: center;
-            margin-bottom: 1em;
-        }
-        label {
-            display: block;
-            margin-top: 1em;
-            font-weight: bold;
-        }
-        input {
-            width: 100%;
-            padding: 0.6em;
-            margin-top: 0.3em;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-        button {
-            margin-top: 2em;
-            width: 100%;
-            padding: 0.8em;
-            background-color: #2563eb;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            font-size: 1em;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: #1d4ed8;
-        }
-        .success {
-            margin-top: 1em;
-            padding: 1em;
-            background-color: #e0fce0;
-            border: 1px solid #a0d0a0;
-            border-radius: 5px;
-        }
-    </style>
+    <title>Generátor smluv</title>
 </head>
 <body>
-    <div class="container">
-        <h1>Generátor smlouvy o dílo</h1>
-        <form method="post">
-            <label for="nazev_akce">Název akce</label>
-            <input type="text" name="nazev_akce" required>
-
-            <label for="cislo_akce">Číslo akce</label>
-            <input type="text" name="cislo_akce" required>
-
-            <label for="cislo_smlouvy">Číslo smlouvy</label>
-            <input type="text" name="cislo_smlouvy" required>
-
-            <label for="objednatel">Objednatel</label>
-            <input type="text" name="objednatel" required>
-
-            <label for="tds">TDS</label>
-            <input type="text" name="tds" required>
-
-            <label for="datum">Datum</label>
-            <input type="date" name="datum" required>
-
-            <button type="submit">Vygenerovat smlouvu</button>
-        </form>
-
-        {% if download_link %}
-        <div class="success">
-            ✅ Smlouva byla úspěšně vygenerována.<br>
-            <a href="{{ download_link }}" target="_blank">Klikněte zde pro stažení</a>
-        </div>
-        <script>
-            window.open("{{ download_link }}", "_blank");
-        </script>
-        {% endif %}
-    </div>
+    <h1>Formulář pro generování smlouvy</h1>
+    <form method="post">
+        <label>Název akce: <input type="text" name="nazev_akce" required></label><br>
+        <label>Číslo akce: <input type="text" name="cislo_akce" required></label><br>
+        <label>Číslo smlouvy: <input type="text" name="cislo_smlouvy" required></label><br>
+        <label>Objednatel: <input type="text" name="objednatel" required></label><br>
+        <label>TDS: <input type="text" name="tds" required></label><br>
+        <label>Datum: <input type="date" name="datum" required></label><br>
+        <button type="submit">Vygenerovat smlouvu</button>
+    </form>
+    {% if download_link %}
+        <p>Smlouva byla vygenerována: <a href="{{ download_link }}">Stáhnout</a></p>
+    {% endif %}
 </body>
 </html>
