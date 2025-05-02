@@ -63,7 +63,7 @@
     <form method="post">
         <label for="sablona">Typ smlouvy</label>
         <select name="sablona" required>
-            <option value="smlouva_o_dilo" {% if data and data.sablona == 'smlouva_o_dilo' %}selected{% endif %}>SOD_PŠ24_realizace</option>
+            <option value="SOD_PS24" {% if data and data.sablona == 'SOD_PS24' %}selected{% endif %}>SOD_PŠ24_realizace</option>
         </select>
 
         <label for="nazev_akce">Název akce</label>
