@@ -20,13 +20,16 @@ def smazat_stare_smlouvy(cesta, max_stari_dni=7):
             if cas_zmeny < threshold:
                 os.remove(filepath)
 
-# Nahrazení ve formátovaných textech
+# Nahrazení textu napříč runy
 def nahrad_v_paragrafech(paragraphs, nahrady):
     for p in paragraphs:
-        for run in p.runs:
-            for klic, hodnota in nahrady.items():
-                if klic in run.text:
-                    run.text = run.text.replace(klic, str(hodnota))  # Ensure replacement with string
+        full_text = ''.join(run.text for run in p.runs)
+        for klic, hodnota in nahrady.items():
+            if klic in full_text:
+                full_text = full_text.replace(klic, str(hodnota))
+        if full_text:
+            p.clear()
+            p.add_run(full_text)
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
