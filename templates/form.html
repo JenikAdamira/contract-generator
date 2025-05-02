@@ -63,8 +63,7 @@
     <form method="post">
         <label for="sablona">Typ smlouvy</label>
         <select name="sablona" required>
-            <option value="smlouva_o_dilo" {% if data and data.sablona == 'smlouva_o_dilo' %}selected{% endif %}>Smlouva o dílo</option>
-            <option value="dodatkova_smlouva" {% if data and data.sablona == 'dodatkova_smlouva' %}selected{% endif %}>Dodatková smlouva</option>
+            <option value="smlouva_o_dilo" {% if data and data.sablona == 'smlouva_o_dilo' %}selected{% endif %}>SOD_PŠ24_realizace</option>
         </select>
 
         <label for="nazev_akce">Název akce</label>
@@ -73,16 +72,29 @@
         <label for="cislo_akce">Číslo akce</label>
         <input type="text" name="cislo_akce" value="{{ data.cislo_akce if data else '' }}" required>
 
-        <label for="cislo_smlouvy">Číslo smlouvy</label>
-        <input type="text" name="cislo_smlouvy" value="{{ data.cislo_smlouvy if data else '' }}" required>
+<label for="vedouci">Vedoucí oddělení</label>
+<select name="tds" required>
+    <option value="" disabled {% if not data or not data.tds %}selected{% endif %}>-- vyberte osobu --</option>
+    <option value="Marcel Chmelík DiS., vedoucí oddělení realizace investic" {% if data and data.tds == 'Marcel Chmelík DiS., vedoucí oddělení realizace investic' %}selected{% endif %}>Marcel Chmelík DiS., vedoucí oddělení realizace investic</option>
+    <option value="Ing. Jakub Hušek, vedoucí oddělení přípravy investic" {% if data and data.tds == 'Ing. Jakub Hušek, vedoucí oddělení přípravy investic' %}selected{% endif %}>Ing. Jakub Hušek, vedoucí oddělení přípravy investic</option>
+</select>
 
-        <label for="objednatel">Objednatel</label>
-        <input type="text" name="objednatel" value="{{ data.objednatel if data else '' }}" required>
+<label for="tds">TDS</label>
+<select name="tds" required>
+    <option value="" disabled {% if not data or not data.tds %}selected{% endif %}>-- vyberte osobu --</option>
+    <option value="Ing. Jan Adamíra" {% if data and data.tds == 'Ing. Jan Adamíra' %}selected{% endif %}>Ing. Jan Adamíra</option>
+    <option value="Ing. Štěpán Havlas" {% if data and data.tds == 'Ing. Štěpán Havlas' %}selected{% endif %}>Ing. Štěpán Havlas</option>
+    <option value="Ing. Pavel Kamenický" {% if data and data.tds == 'Ing. Pavel Kamenický' %}selected{% endif %}>Ing. Pavel Kamenický</option>
+    <option value="Milan Kyral DiS." {% if data and data.tds == 'Milan Kyral DiS.' %}selected{% endif %}>Milan Kyral DiS.</option>
+    <option value="Ing. Martin Oliva" {% if data and data.tds == 'Ing. Martin Oliva' %}selected{% endif %}>Ing. Martin Oliva</option>
+    <option value="Martin Pala" {% if data and data.tds == 'Martin Pala' %}selected{% endif %}>Martin Pala</option>
+    <option value="Ing. Michal Ranný" {% if data and data.tds == 'Ing. Michal Ranný' %}selected{% endif %}>Ing. Michal Ranný</option>
+    <option value="Ing. Marek Špryňar" {% if data and data.tds == 'Ing. Marek Špryňar' %}selected{% endif %}>Ing. Marek Špryňar</option>
+    <option value="Ing. Vladimír Vít" {% if data and data.tds == 'Ing. Vladimír Vít' %}selected{% endif %}>Ing. Vladimír Vít</option>
+    <option value="Ing. František Zurek" {% if data and data.tds == 'Ing. František Zurek' %}selected{% endif %}>Ing. František Zurek</option>
+</select>
 
-        <label for="tds">TDS</label>
-        <input type="text" name="tds" value="{{ data.tds if data else '' }}" required>
-
-        <label for="datum">Datum</label>
+        <label for="zahajeni">Datum zahájení</label>
         <input type="date" name="datum" value="{{ data.datum if data else '' }}" required>
 
         <button type="submit">Vygenerovat smlouvu</button>
