@@ -57,7 +57,7 @@ def index():
             '{{nazev_akce}}': nazev_akce,
             '{{cislo_akce}}': cislo_akce,
             '{{vedouci}}': vedouci,
-            '{{TDS}}': tds,
+            '{{tds}}': tds,
             '{{zahajeni}}': datum
         }
 
