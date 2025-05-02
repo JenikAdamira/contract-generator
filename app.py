@@ -4,8 +4,11 @@ import os
 import uuid
 
 app = Flask(__name__)
+
+# Složka, kam se ukládají smlouvy
 UPLOAD_FOLDER = 'static/contracts'
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
@@ -17,27 +20,41 @@ def index():
         tds = request.form['tds']
         datum = request.form['datum']
 
+        # Načtení šablony a nahrazení značek
         doc = Document('template.docx')
-# Nahrazení v těle dokumentu
-for p in doc.paragraphs:
-    p.text = p.text.replace('{{nazev}}', nazev_akce)
-    p.text = p.text.replace('{{cislo}}', cislo_akce)
-    p.text = p.text.replace('{{ID_smlouvy}}', cislo_smlouvy)
-    p.text = p.text.replace('{{objednatel}}', objednatel)
-    p.text = p.text.replace('{{TDS}}', tds)
-    p.text = p.text.replace('{{datum}}', datum)
 
-# Nahrazení v zápatí (v každé sekci dokumentu)
-for section in doc.sections:
-    footer = section.footer
-    for p in footer.paragraphs:
-        p.text = p.text.replace('{{nazev}}', nazev_akce)
-        p.text = p.text.replace('{{cislo}}', cislo_akce)
-        p.text = p.text.replace('{{datum}}', datum)
+        # Tělo dokumentu
+        for p in doc.paragraphs:
+            p.text = p.text.replace('{{nazev}}', nazev_akce)
+            p.text = p.text.replace('{{cislo}}', cislo_akce)
+            p.text = p.text.replace('{{ID_smlouvy}}', cislo_smlouvy)
+            p.text = p.text.replace('{{objednatel}}', objednatel)
+            p.text = p.text.replace('{{TDS}}', tds)
+            p.text = p.text.replace('{{datum}}', datum)
 
+        # Zápatí (pro všechny sekce dokumentu)
+        for section in doc.sections:
+            footer = section.footer
+            for p in footer.paragraphs:
+                p.text = p.text.replace('{{nazev}}', nazev_akce)
+                p.text = p.text.replace('{{cislo}}', cislo_akce)
+                p.text = p.text.replace('{{datum}}', datum)
+
+        # Uložení dokumentu s unikátním názvem
         filename = f"smlouva_{uuid.uuid4().hex}.docx"
         filepath = os.path.join(UPLOAD_FOLDER, filename)
         doc.save(filepath)
 
-        return render_template('form.html', download_link=filepath)
+        return render_template('form.html', download_link='/' + filepath)
+
     return render_template('form.html')
+
+
+# Pro stahování souboru
+@app.route('/static/contracts/<filename>')
+def download_file(filename):
+    return send_from_directory(UPLOAD_FOLDER, filename, as_attachment=True)
+
+
+if __name__ == '__main__':
+    app.run(debug=True)
