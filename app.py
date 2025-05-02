@@ -33,10 +33,9 @@ def index():
     if request.method == 'POST':
         smazat_stare_smlouvy(UPLOAD_FOLDER)
 
-        # Načtení dat
-        nazev-akce = request.form['nazev-akce']
-        cislo-akce = request.form['cislo-akce']
-        cislo_smlouvy = request.form['cislo_smlouvy']
+        # Načtení dat z formuláře (opraveno s podtržítky)
+        nazev_akce = request.form['nazev_akce']
+        cislo_akce = request.form['cislo_akce']
         vedouci = request.form['vedouci']
         tds = request.form['tds']
         datum_input = request.form['zahajeni']
@@ -45,8 +44,8 @@ def index():
         datum = datetime.strptime(datum_input, '%Y-%m-%d').strftime('%d. %m. %Y')
 
         nahrady = {
-            '{{nazev-akce}}': nazev-akce,
-            '{{cislo-akce}}': cislo-akce,
+            '{{nazev_akce}}': nazev_akce,
+            '{{cislo_akce}}': cislo_akce,
             '{{vedouci}}': vedouci,
             '{{TDS}}': tds,
             '{{zahajeni}}': datum
@@ -70,8 +69,8 @@ def index():
             download_link='/' + filepath,
             data={
                 'sablona': sablona,
-                'nazev-akce': nazev-akce,
-                'cislo-akce': cislo-akce,
+                'nazev_akce': nazev_akce,
+                'cislo_akce': cislo_akce,
                 'vedouci': vedouci,
                 'tds': tds,
                 'zahajeni': datum_input
