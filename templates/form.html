@@ -2,7 +2,7 @@
 <html lang="cs">
 <head>
     <meta charset="UTF-8">
-    <title>Generátor smlouvy o dílo</title>
+    <title>Generátor smlouvy</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -58,47 +58,48 @@
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Generátor smlouvy</h1>
-        <form method="post">
-            <label for="sablona">Typ smlouvy</label>
-            <select name="sablona" required>
-                <option value="smlouva_o_dilo">Smlouva o dílo</option>
-                <option value="dodatkova_smlouva">Dodatková smlouva</option>
-                <!-- Přidej další typy, pokud chceš -->
-            </select>
+<div class="container">
+    <h1>Generátor smlouvy</h1>
+    <form method="post">
+        <label for="sablona">Typ smlouvy</label>
+        <select name="sablona" required>
+            <option value="smlouva_o_dilo" {% if data and data.sablona == 'smlouva_o_dilo' %}selected{% endif %}>Smlouva o dílo</option>
+            <option value="dodatkova_smlouva" {% if data and data.sablona == 'dodatkova_smlouva' %}selected{% endif %}>Dodatková smlouva</option>
+        </select>
 
-            <label for="nazev_akce">Název akce</label>
-            <input type="text" name="nazev_akce" required>
+        <label for="nazev_akce">Název akce</label>
+        <input type="text" name="nazev_akce" value="{{ data.nazev_akce if data else '' }}" required>
 
-            <label for="cislo_akce">Číslo akce</label>
-            <input type="text" name="cislo_akce" required>
+        <label for="cislo_akce">Číslo akce</label>
+        <input type="text" name="cislo_akce" value="{{ data.cislo_akce if data else '' }}" required>
 
-            <label for="cislo_smlouvy">Číslo smlouvy</label>
-            <input type="text" name="cislo_smlouvy" required>
+        <label for="cislo_smlouvy">Číslo smlouvy</label>
+        <input type="text" name="cislo_smlouvy" value="{{ data.cislo_smlouvy if data else '' }}" required>
 
-            <label for="objednatel">Objednatel</label>
-            <input type="text" name="objednatel" required>
+        <label for="objednatel">Objednatel</label>
+        <input type="text" name="objednatel" value="{{ data.objednatel if data else '' }}" required>
 
-            <label for="tds">TDS</label>
-            <input type="text" name="tds" required>
+        <label for="tds">TDS</label>
+        <input type="text" name="tds" value="{{ data.tds if data else '' }}" required>
 
-            <label for="datum">Datum uzavření</label>
-            <input type="date" name="datum" required>
+        <label for="datum">Datum</label>
+        <input type="date" name="datum" value="{{ data.datum if data else '' }}" required>
 
-            <button type="submit">Vygenerovat smlouvu</button>
+        <button type="submit">Vygenerovat smlouvu</button>
+    </form>
+
+    {% if download_link %}
+    <div class="success">
+        ✅ Smlouva byla úspěšně vygenerována.<br>
+        <a href="{{ download_link }}" target="_blank">Klikněte zde pro stažení</a>
+        <form method="get" style="margin-top: 1em;">
+            <button type="submit">Nová smlouva</button>
         </form>
-
-        {% if download_link %}
-        <div class="success">
-            ✅ Smlouva byla úspěšně vygenerována.<br>
-            <a href="{{ download_link }}" target="_blank">Klikněte zde pro stažení</a>
-        </div>
-        <script>
-            // Otevře odkaz automaticky
-            window.open("{{ download_link }}", "_blank");
-        </script>
-        {% endif %}
     </div>
+    <script>
+        window.open("{{ download_link }}", "_blank");
+    </script>
+    {% endif %}
+</div>
 </body>
 </html>
