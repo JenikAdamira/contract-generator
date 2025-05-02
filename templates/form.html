@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <title>Generátor smluv</title>
+</head>
+<body>
+    <h1>Formulář pro generování smlouvy</h1>
+    <form method="post">
+        <label>Název akce: <input type="text" name="nazev_akce" required></label><br>
+        <label>Číslo akce: <input type="text" name="cislo_akce" required></label><br>
+        <label>Číslo smlouvy: <input type="text" name="cislo_smlouvy" required></label><br>
+        <label>Objednatel: <input type="text" name="objednatel" required></label><br>
+        <label>TDS: <input type="text" name="tds" required></label><br>
+        <label>Datum: <input type="date" name="datum" required></label><br>
+        <button type="submit">Vygenerovat smlouvu</button>
+    </form>
+    {% if download_link %}
+        <p>Smlouva byla vygenerována: <a href="{{ download_link }}">Stáhnout</a></p>
+    {% endif %}
+</body>
+</html>
