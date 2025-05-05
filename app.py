@@ -18,27 +18,20 @@ def index():
             "Objednatel nežádá zhotovitele o předložení bankovní záruky za provedení díla."
         )
 
-        # Vyhrazené položky
+        # Vyhrazené položky (pouze text + upozornění místo tabulky)
         vyh_text = ""
-        vyh_rows = []
+        vyh_placeholder = ""
         vz1 = ""
         vz2 = ""
         if request.form["vyh"] == "ANO":
             vyh_text = (
-                "Smluvní strany se dohodly na vyhrazené změně závazku v souladu s ustanovením § 100 odst. 1 a § 222 odst. 2 "
-                "zákona č. 134/2016 Sb., o zadávání veřejných zakázek..."
+                "8.4.	Smluvní strany se dohodly na vyhrazené změně závazku v souladu s ustanovením § 100 odst. 1 a § 222 odst. 2 zákona č. 134/2016 Sb., o zadávání veřejných zakázek, ve znění pozdějších předpisů, spočívající v tom, že pokud u položek uvedených v tabulce „Souhrn vyhrazených položek“ dojde k naměření jiného množství, než bylo předpokládáno výkazem výměr, platí pro účely fakturace naměřená hodnota, avšak maximálně do výše limitů stanovených jako 50 % víceprací a 50 % méněprací v rámci všech podle tohoto dokumentu označených položek výkazu výměr. Měření musí být evidováno ve formě Evidenčního listu vyhrazené změny, což je samostatný dokument obsahující přehled skutečně naměřených množství jednotlivých položek výkazu výměr, pokud se liší od původního předpokladu, přičemž vyhrazené změny lze uplatnit pouze v souladu s uvedenými limity."
             )
+            vyh_placeholder = "Do vygenerované smlouvy vlož Souhrn vyhrazených položek"
             vz1 = "(překročitelná jen při uplatnění vyhrazených změn v čl. 8.10. smlouvy a dále v režimu zákona)"
             vz2 = "(jedná se o cenu díla před aktivací změn vyhrazených v čl. 8.10. smlouvy)"
 
-            count = int(request.form["vyh_count"])
-            for i in range(1, count + 1):
-                so = request.form.get(f"so_{i}")
-                polozky = request.form.get(f"polozky_{i}")
-                if so or polozky:
-                    vyh_rows.append({"so": so, "polozky": polozky})
-
-        # Projektová dokumentace typ
+        # Projektová dokumentace
         pd_map = {
             "zjednodusena": "zjednodušenou projektovou dokumentací",
             "provadeci": "projektovou dokumentací pro provedení stavby"
@@ -51,6 +44,14 @@ def index():
         else:
             dokonceni = request.form["dokonceni_text"]
 
+        # Listiny (seznam)
+        listiny = []
+        count = int(request.form["listiny_count"])
+        for i in range(1, count + 1):
+            hodnota = request.form.get(f"listina_{i}")
+            if hodnota:
+                listiny.append(hodnota)
+
         context = {
             "cislo_akce": request.form["cislo_akce"],
             "nazev_akce": request.form["nazev_akce"],
@@ -60,7 +61,8 @@ def index():
             "bz": bz_text,
             "poj": request.form["poj"],
             "vyh_text": vyh_text,
-            "vyh_tabulka": vyh_rows,
+            "vyh_tabulka": [],  # prázdné
+            "vyh_placeholder": vyh_placeholder,
             "vz1": vz1,
             "vz2": vz2,
             "pd": pd_text,
@@ -68,7 +70,8 @@ def index():
             "pdspolecnost": request.form["pdspolecnost"],
             "pdsidlo": request.form["pdsidlo"],
             "pdproj": request.form["pdproj"],
-            "dokonceni": dokonceni
+            "dokonceni": dokonceni,
+            "listiny": listiny
         }
 
         doc = DocxTemplate("SOD_PS24.docx")
