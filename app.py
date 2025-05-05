@@ -1,106 +1,29 @@
-from flask import Flask, render_template, request, send_from_directory
-from docx import Document
-from datetime import datetime, timedelta
-import os
-import uuid
+from flask import Flask, render_template, request, send_file
+from docxtpl import DocxTemplate
+import io
+from datetime import datetime
 
 app = Flask(__name__)
 
-UPLOAD_FOLDER = 'static/contracts'
-SABLONY_FOLDER = 'templates_word'
-os.makedirs(UPLOAD_FOLDER, exist_ok=True)
-
-# Smazání starých smluv
-def smazat_stare_smlouvy(cesta, max_stari_dni=7):
-    threshold = datetime.now() - timedelta(days=max_stari_dni)
-    for filename in os.listdir(cesta):
-        filepath = os.path.join(cesta, filename)
-        if os.path.isfile(filepath):
-            cas_zmeny = datetime.fromtimestamp(os.path.getmtime(filepath))
-            if cas_zmeny < threshold:
-                os.remove(filepath)
-
-# Kombinovaná náhrada v paragrafech – zachovává formát, ale zálohuje přepisem
-def nahrad_v_paragrafech_bezpecne(paragraphs, nahrady):
-    for p in paragraphs:
-        nahrazeno = False
-        for run in p.runs:
-            for klic, hodnota in nahrady.items():
-                if klic in run.text:
-                    run.text = run.text.replace(klic, str(hodnota))
-                    nahrazeno = True
-        if not nahrazeno:
-            full_text = ''.join(run.text for run in p.runs)
-            for klic, hodnota in nahrady.items():
-                if klic in full_text:
-                    full_text = full_text.replace(klic, str(hodnota))
-                    p.clear()
-                    p.add_run(full_text)
-
-# Nahrazení v tabulkách
-def nahrad_v_tabulkach(tables, nahrady):
-    for table in tables:
-        for row in table.rows:
-            for cell in row.cells:
-                nahrad_v_paragrafech_bezpecne(cell.paragraphs, nahrady)
-
-@app.route('/', methods=['GET', 'POST'])
+@app.route("/", methods=["GET", "POST"])
 def index():
-    if request.method == 'POST':
-        smazat_stare_smlouvy(UPLOAD_FOLDER)
-
-        # Načtení dat z formuláře
-        nazev_akce = request.form['nazev_akce']
-        cislo_akce = request.form['cislo_akce']
-        vedouci = request.form['vedouci']
-        tds = request.form['tds']
-        datum_input = request.form['zahajeni']
-        sablona = request.form['sablona']
-
-        datum = datetime.strptime(datum_input, '%Y-%m-%d').strftime('%d. %m. %Y')
-
-        nahrady = {
-            '{{nazev_akce}}': nazev_akce,
-            '{{cislo_akce}}': cislo_akce,
-            '{{vedouci}}': vedouci,
-            '{{TDS}}': tds,
-            '{{zahajeni}}': datum
+    if request.method == "POST":
+        context = {
+            "cislo_akce": request.form["cislo_akce"],
+            "nazev_akce": request.form["nazev_akce"],
+            "vedouci": request.form["vedouci"],
+            "dozor": request.form["dozor"],
+            "zahajeni": request.form["zahajeni"],
         }
 
-        sablona_path = os.path.join(SABLONY_FOLDER, sablona + '.docx')
-        if not os.path.exists(sablona_path):
-            return "Šablona neexistuje.", 400
+        doc = DocxTemplate("SOD_PS24.docx")
+        doc.render(context)
 
-        doc = Document(sablona_path)
-        nahrad_v_paragrafech_bezpecne(doc.paragraphs, nahrady)
-        nahrad_v_tabulkach(doc.tables, nahrady)
+        output = io.BytesIO()
+        doc.save(output)
+        output.seek(0)
 
-        for section in doc.sections:
-            nahrad_v_paragrafech_bezpecne(section.footer.paragraphs, nahrady)
-            nahrad_v_tabulkach(section.footer.tables, nahrady)
+        filename = f"Smlouva_{datetime.now().strftime('%Y%m%d_%H%M%S')}.docx"
+        return send_file(output, as_attachment=True, download_name=filename)
 
-        filename = f"{sablona}_{uuid.uuid4().hex}.docx"
-        filepath = os.path.join(UPLOAD_FOLDER, filename)
-        doc.save(filepath)
-
-        return render_template(
-            'form.html',
-            download_link='/' + filepath,
-            data={
-                'sablona': sablona,
-                'nazev_akce': nazev_akce,
-                'cislo_akce': cislo_akce,
-                'vedouci': vedouci,
-                'tds': tds,
-                'zahajeni': datum_input
-            }
-        )
-
-    return render_template('form.html')
-
-@app.route('/static/contracts/<filename>')
-def download_file(filename):
-    return send_from_directory(UPLOAD_FOLDER, filename, as_attachment=True)
-
-if __name__ == '__main__':
-    app.run(debug=True)
+    return render_template("form.html")
