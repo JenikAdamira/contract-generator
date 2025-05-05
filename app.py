@@ -13,6 +13,7 @@ def index():
         vyh_choice = request.form["vyh"]
         pojistka = request.form["poj"]
 
+        # Bankovní záruka
         bz_text = (
             "6.1.\tZhotovitel předložil objednateli v den podpisu smlouvy o dílo originál bankovní "
             "záruky za provedení díla podle ustanovení čl. 7 Bankovní záruka, odst. 7.1. Obchodních podmínek "
@@ -21,16 +22,23 @@ def index():
             "Objednatel nežádá zhotovitele o předložení bankovní záruky za provedení díla."
         )
 
-        vyh_text = (
-            "8.4.\tSmluvní strany se dohodly na vyhrazené změně závazku v souladu s ustanovením § 100 odst. 1 a § 222 odst. 2 "
-            "zákona č. 134/2016 Sb., o zadávání veřejných zakázek, ve znění pozdějších předpisů, spočívající v tom, že pokud u položek "
-            "uvedených v tabulce „Souhrn vyhrazených položek“ dojde k naměření jiného množství, než bylo předpokládáno výkazem výměr, platí "
-            "pro účely fakturace naměřená hodnota, avšak maximálně do výše limitů stanovených jako 50 % víceprací a 50 % méněprací v rámci všech podle tohoto dokumentu označených položek výkazu výměr. "
-            "Měření musí být evidováno ve formě Evidenčního listu vyhrazené změny, což je samostatný dokument obsahující přehled skutečně naměřených množství jednotlivých položek výkazu výměr, pokud se liší od původního předpokladu, přičemž vyhrazené změny lze uplatnit pouze v souladu s uvedenými limity."
-        ) if vyh_choice == "ANO" else ""
-
+        # Vyhrazené změny – text a tabulka
+        vyh_text = ""
         vyh_rows = []
+        vz1 = ""
+        vz2 = ""
+
         if vyh_choice == "ANO":
+            vyh_text = (
+                "8.4.\tSmluvní strany se dohodly na vyhrazené změně závazku v souladu s ustanovením § 100 odst. 1 a § 222 odst. 2 "
+                "zákona č. 134/2016 Sb., o zadávání veřejných zakázek, ve znění pozdějších předpisů, spočívající v tom, že pokud u položek "
+                "uvedených v tabulce „Souhrn vyhrazených položek“ dojde k naměření jiného množství, než bylo předpokládáno výkazem výměr, platí "
+                "pro účely fakturace naměřená hodnota, avšak maximálně do výše limitů stanovených jako 50 % víceprací a 50 % méněprací v rámci všech podle tohoto dokumentu označených položek výkazu výměr. "
+                "Měření musí být evidováno ve formě Evidenčního listu vyhrazené změny, což je samostatný dokument obsahující přehled skutečně naměřených množství jednotlivých položek výkazu výměr, pokud se liší od původního předpokladu, přičemž vyhrazené změny lze uplatnit pouze v souladu s uvedenými limity."
+            )
+            vz1 = "(překročitelná jen při uplatnění vyhrazených změn v čl. 8.10. smlouvy a dále v režimu zákona)"
+            vz2 = "(jedná se o cenu díla před aktivací změn vyhrazených v čl. 8.10. smlouvy)"
+
             count = int(request.form["vyh_count"])
             for i in range(1, count + 1):
                 so = request.form.get(f"so_{i}")
@@ -50,7 +58,9 @@ def index():
             "bz": bz_text,
             "poj": pojistka,
             "vyh_text": vyh_text,
-            "vyh_tabulka": vyh_rows
+            "vyh_tabulka": vyh_rows,
+            "vz1": vz1,
+            "vz2": vz2
         }
 
         doc = DocxTemplate("SOD_PS24.docx")
