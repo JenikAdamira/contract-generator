@@ -189,6 +189,29 @@ function pridatNegaci() {
   textarea.className = "w-full p-2 border rounded resize-none";
   wrapper.appendChild(textarea);
 }
+    function pridatAkci() {
+  const wrapper = document.getElementById("akce-wrapper");
+  const countInput = document.getElementById("akce_count");
+  let count = parseInt(countInput.value);
+  count++;
+
+  const div = document.createElement("div");
+
+  div.innerHTML = `
+    <label class="block text-sm font-semibold text-gray-700 mb-1">Název akce</label>
+    <input type="text" name="nazev_akce_${count}" class="w-full mb-2 p-2 border rounded" />
+    <label class="block text-sm font-semibold text-gray-700 mb-1">Číslo akce</label>
+    <input type="text" name="cislo_akce_${count}" class="w-full p-2 border rounded" />
+  `;
+
+  wrapper.appendChild(div);
+  countInput.value = count;
+
+  // Zobraz veřejnou zakázku, pokud je víc než 1 akce
+  if (count >= 2) {
+    document.getElementById("verejna-zakazka-field").classList.remove("hidden");
+  }
+}
   </script>
 </body>
 </html>
