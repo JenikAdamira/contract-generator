@@ -126,7 +126,7 @@ def index():
             "pdproj": request.form["pdproj"],
             "dokonceni": dokonceni,
             "listiny": listiny,
-            "negace": negace
+            "negace": negace,
             "vice_akci": vice_akci.strip(),
         "nazev_akce": nazev_akce_final,
         "cislo_akce": cislo_akce_final,
