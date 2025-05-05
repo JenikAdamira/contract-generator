@@ -23,20 +23,29 @@ def index():
                 cisla_akci.append(cislo)
 
         verejna_zakazka = request.form.get("verejna_zakazka", "").strip()
-       if akce_count >= 2 and verejna_zakazka:
-    nazev_akce_final = verejna_zakazka
-else:
-    nazev_akce_final = nazvy_akci[0] if nazvy_akci else ""        
+
+        if akce_count >= 2 and verejna_zakazka:
+            nazev_akce_final = verejna_zakazka
+        else:
+            nazev_akce_final = nazvy_akci[0] if nazvy_akci else ""
 
         cislo_akce_final = ", ".join(cisla_akci)
 
-# Výpis jednotlivých akcí – pokud je více než jedna
-vice_akci = ""
-if akce_count >= 2:
-    vice_akci = "které se skládá ze dvou níže uvedených jednotlivých akcí:\n"
-    for cislo, nazev in zip(cisla_akci, nazvy_akci):
-        if cislo and nazev:
-            vice_akci += f"č. {cislo} {nazev}\n"
+        # vice_akci – seznam textu
+        vice_akci = ""
+        if akce_count >= 2:
+            vice_akci = "které se skládá ze dvou níže uvedených jednotlivých akcí:\n"
+            for cislo, nazev in zip(cisla_akci, nazvy_akci):
+                if cislo and nazev:
+                    vice_akci += f"č. {cislo} {nazev}\n"
+
+        # seznam_akci – volitelné pro budoucí použití (např. se smyčkou ve Wordu)
+        seznam_akci = []
+        if akce_count >= 2:
+            for cislo, nazev in zip(cisla_akci, nazvy_akci):
+                if cislo and nazev:
+                    seznam_akci.append({"cislo": cislo, "nazev": nazev})
+
 
         # Bankovní záruka
         bz_text = (
@@ -119,6 +128,11 @@ if akce_count >= 2:
             "listiny": listiny,
             "negace": negace
             "vice_akci": vice_akci.strip(),
+        "nazev_akce": nazev_akce_final,
+        "cislo_akce": cislo_akce_final,
+        "vice_akci": vice_akci.strip(),
+        "seznam_akci": seznam_akci,
+
         }
 
         doc = DocxTemplate("SOD_PS24.docx")
