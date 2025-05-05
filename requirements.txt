@@ -1,3 +1,2 @@
 Flask
-python-docx
-gunicorn
+python-docx-template
