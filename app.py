@@ -23,11 +23,20 @@ def index():
                 cisla_akci.append(cislo)
 
         verejna_zakazka = request.form.get("verejna_zakazka", "").strip()
-        nazev_akce_final = nazvy_akci[0] if nazvy_akci else ""
-        if akce_count >= 2 and verejna_zakazka:
-            nazev_akce_final += f", veřejná zakázka: {verejna_zakazka}"
+       if akce_count >= 2 and verejna_zakazka:
+    nazev_akce_final = verejna_zakazka
+else:
+    nazev_akce_final = nazvy_akci[0] if nazvy_akci else ""        
 
         cislo_akce_final = ", ".join(cisla_akci)
+
+# Výpis jednotlivých akcí – pokud je více než jedna
+vice_akci = ""
+if akce_count >= 2:
+    vice_akci = "které se skládá ze dvou níže uvedených jednotlivých akcí:\n"
+    for cislo, nazev in zip(cisla_akci, nazvy_akci):
+        if cislo and nazev:
+            vice_akci += f"č. {cislo} {nazev}\n"
 
         # Bankovní záruka
         bz_text = (
@@ -109,6 +118,7 @@ def index():
             "dokonceni": dokonceni,
             "listiny": listiny,
             "negace": negace
+            "vice_akci": vice_akci.strip(),
         }
 
         doc = DocxTemplate("SOD_PS24.docx")
