@@ -1,117 +1,32 @@
 <!DOCTYPE html>
 <html lang="cs">
 <head>
-    <meta charset="UTF-8">
-    <title>Generátor smlouvy</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f3f4f6;
-            padding: 2em;
-            color: #111;
-        }
-        .container {
-            max-width: 600px;
-            margin: auto;
-            background: white;
-            padding: 2em;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-        }
-        h1 {
-            text-align: center;
-            margin-bottom: 1em;
-        }
-        label {
-            display: block;
-            margin-top: 1em;
-            font-weight: bold;
-        }
-        input, select {
-            width: 100%;
-            padding: 0.6em;
-            margin-top: 0.3em;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-        button {
-            margin-top: 2em;
-            width: 100%;
-            padding: 0.8em;
-            background-color: #2563eb;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            font-size: 1em;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: #1d4ed8;
-        }
-        .success {
-            margin-top: 1.5em;
-            padding: 1em;
-            background-color: #e0fce0;
-            border: 1px solid #a0d0a0;
-            border-radius: 5px;
-        }
-    </style>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Generátor smluv</title>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-<div class="container">
-    <h1>Generátor smlouvy</h1>
-    <form method="post">
-        <label for="sablona">Typ smlouvy</label>
-        <select name="sablona" required>
-            <option value="SOD_PS24" {% if data and data.sablona == 'SOD_PS24' %}selected{% endif %}>SOD_PŠ24_realizace</option>
-        </select>
+<body class="bg-gray-100 text-gray-800">
+    <div class="max-w-xl mx-auto mt-10 bg-white p-6 rounded-xl shadow-md">
+        <h1 class="text-2xl font-bold mb-6 text-center">Generátor smlouvy</h1>
+        <form method="POST">
+            <label class="block mb-2">Název akce</label>
+            <input type="text" name="nazev_akce" required class="w-full mb-4 p-2 border rounded" />
 
-        <label for="nazev_akce">Název akce</label>
-        <input type="text" name="nazev_akce" value="{{ data.nazev_akce if data else '' }}" required>
+            <label class="block mb-2">Číslo akce</label>
+            <input type="text" name="cislo_akce" required class="w-full mb-4 p-2 border rounded" />
 
-        <label for="cislo_akce">Číslo akce</label>
-        <input type="text" name="cislo_akce" value="{{ data.cislo_akce if data else '' }}" required>
+            <label class="block mb-2">Vedoucí</label>
+            <input type="text" name="vedouci" required class="w-full mb-4 p-2 border rounded" />
 
-        <label for="vedouci">Vedoucí oddělení</label>
-        <select name="vedouci" required>
-            <option value="" disabled {% if not data or not data.vedouci %}selected{% endif %}>-- vyberte osobu --</option>
-            <option value="Marcel Chmelík DiS., vedoucí oddělení realizace investic" {% if data and data.vedouci == 'Marcel Chmelík DiS., vedoucí oddělení realizace investic' %}selected{% endif %}>Marcel Chmelík DiS., vedoucí oddělení realizace investic</option>
-            <option value="Ing. Jakub Hušek, vedoucí oddělení přípravy investic" {% if data and data.vedouci == 'Ing. Jakub Hušek, vedoucí oddělení přípravy investic' %}selected{% endif %}>Ing. Jakub Hušek, vedoucí oddělení přípravy investic</option>
-        </select>
+            <label class="block mb-2">Dozor (TDS)</label>
+            <input type="text" name="dozor" required class="w-full mb-4 p-2 border rounded" />
 
-        <label for="tds">TDS</label>
-        <select name="tds" required>
-            <option value="" disabled {% if not data or not data.tds %}selected{% endif %}>-- vyberte osobu --</option>
-            <option value="Ing. Jan Adamíra" {% if data and data.tds == 'Ing. Jan Adamíra' %}selected{% endif %}>Ing. Jan Adamíra</option>
-            <option value="Ing. Štěpán Havlas" {% if data and data.tds == 'Ing. Štěpán Havlas' %}selected{% endif %}>Ing. Štěpán Havlas</option>
-            <option value="Ing. Pavel Kamenický" {% if data and data.tds == 'Ing. Pavel Kamenický' %}selected{% endif %}>Ing. Pavel Kamenický</option>
-            <option value="Milan Kyral DiS." {% if data and data.tds == 'Milan Kyral DiS.' %}selected{% endif %}>Milan Kyral DiS.</option>
-            <option value="Ing. Martin Oliva" {% if data and data.tds == 'Ing. Martin Oliva' %}selected{% endif %}>Ing. Martin Oliva</option>
-            <option value="Martin Pala" {% if data and data.tds == 'Martin Pala' %}selected{% endif %}>Martin Pala</option>
-            <option value="Ing. Michal Ranný" {% if data and data.tds == 'Ing. Michal Ranný' %}selected{% endif %}>Ing. Michal Ranný</option>
-            <option value="Ing. Marek Špryňar" {% if data and data.tds == 'Ing. Marek Špryňar' %}selected{% endif %}>Ing. Marek Špryňar</option>
-            <option value="Ing. Vladimír Vít" {% if data and data.tds == 'Ing. Vladimír Vít' %}selected{% endif %}>Ing. Vladimír Vít</option>
-            <option value="Ing. František Zurek" {% if data and data.tds == 'Ing. František Zurek' %}selected{% endif %}>Ing. František Zurek</option>
-        </select>
+            <label class="block mb-2">Zahájení</label>
+            <input type="date" name="zahajeni" required class="w-full mb-6 p-2 border rounded" />
 
-        <label for="zahajeni">Datum zahájení</label>
-        <input type="date" name="zahajeni" value="{{ data.zahajeni if data else '' }}" required>
-
-        <button type="submit">Vygenerovat smlouvu</button>
-    </form>
-
-    {% if download_link %}
-    <div class="success">
-        ✅ Smlouva byla úspěšně vygenerována.<br>
-        <a href="{{ download_link }}" target="_blank">Klikněte zde pro stažení</a>
-        <form method="get" style="margin-top: 1em;">
-            <button type="submit">Nová smlouva</button>
+            <button type="submit" class="w-full bg-blue-600 text-white p-3 rounded hover:bg-blue-700">Vygenerovat smlouvu</button>
         </form>
     </div>
-    <script>
-        window.open("{{ download_link }}", "_blank");
-    </script>
-    {% endif %}
-</div>
 </body>
 </html>
