@@ -101,9 +101,8 @@
       <div>
         <h2 class="text-xl font-semibold mb-2 text-gray-700 uppercase">Listiny tvořící součást smlouvy</h2>
         <div id="listiny-wrapper" class="space-y-2 mb-2">
-          <input type="text" name="listina_1" class="w-full p-2 border rounded" />
-          <input type="text" name="listina_2" class="w-full p-2 border rounded" />
-          <input type="text" name="listina_3" class="w-full p-2 border rounded" />
+          <input type="text" name="listina_1" rows="2" class="w-full p-2 border rounded" />
+          <input type="text" name="listina_2" rows="2" class="w-full p-2 border rounded" />
         </div>
         <input type="hidden" name="listiny_count" id="listiny_count" value="3" />
         <button type="button" onclick="pridatListinu()" class="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600">
@@ -125,10 +124,9 @@
       <div>
         <h2 class="text-xl font-semibold mb-2 text-gray-700 uppercase">Negace</h2>
         <div id="negace-wrapper" class="space-y-2 mb-2">
-          <input type="text" name="negace_1" class="w-full p-2 border rounded"
-            value="- čl. 2. Všeobecné povinnosti zhotovitele, odst. 2.3., písm. a) Dokumentace, povodňové plány, geodetické práce, body 4., 5." />
-          <input type="text" name="negace_2" class="w-full p-2 border rounded" />
-          <input type="text" name="negace_3" class="w-full p-2 border rounded" />
+          <input type="text" name="negace_1" rows="2" class="w-full p-2 border rounded"
+            value="čl. 2. Všeobecné povinnosti zhotovitele, odst. 2.3., písm. a) Dokumentace, povodňové plány, geodetické práce, body 4., 5." />
+          <input type="text" name="negace_2" rows="2" class="w-full p-2 border rounded" />
         </div>
         <input type="hidden" name="negace_count" id="negace_count" value="3" />
         <button type="button" onclick="pridatNegaci()" class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600">
@@ -152,33 +150,33 @@
       document.getElementById("dokonceni_text").classList.toggle("hidden", typ !== "text");
     }
 
-    function pridatListinu() {
-      const wrapper = document.getElementById("listiny-wrapper");
-      const countInput = document.getElementById("listiny_count");
-      let count = parseInt(countInput.value);
-      count++;
-      countInput.value = count;
+function pridatListinu() {
+  const wrapper = document.getElementById("listiny-wrapper");
+  const countInput = document.getElementById("listiny_count");
+  let count = parseInt(countInput.value);
+  count++;
+  countInput.value = count;
 
-      const input = document.createElement("input");
-      input.type = "text";
-      input.name = `listina_${count}`;
-      input.className = "w-full p-2 border rounded";
-      wrapper.appendChild(input);
-    }
+  const textarea = document.createElement("textarea");
+  textarea.name = `listina_${count}`;
+  textarea.rows = 2;
+  textarea.className = "w-full p-2 border rounded resize-none";
+  wrapper.appendChild(textarea);
+}
 
-    function pridatNegaci() {
-      const wrapper = document.getElementById("negace-wrapper");
-      const countInput = document.getElementById("negace_count");
-      let count = parseInt(countInput.value);
-      count++;
-      countInput.value = count;
+function pridatNegaci() {
+  const wrapper = document.getElementById("negace-wrapper");
+  const countInput = document.getElementById("negace_count");
+  let count = parseInt(countInput.value);
+  count++;
+  countInput.value = count;
 
-      const input = document.createElement("input");
-      input.type = "text";
-      input.name = `negace_${count}`;
-      input.className = "w-full p-2 border rounded";
-      wrapper.appendChild(input);
-    }
+  const textarea = document.createElement("textarea");
+  textarea.name = `negace_${count}`;
+  textarea.rows = 2;
+  textarea.className = "w-full p-2 border rounded resize-none";
+  wrapper.appendChild(textarea);
+}
   </script>
 </body>
 </html>
