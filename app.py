@@ -15,7 +15,7 @@ def index():
 
         # Bankovní záruka
         bz_text = (
-            "6.1.\tZhotovitel předložil objednateli v den podpisu smlouvy o dílo originál bankovní "
+            "Zhotovitel předložil objednateli v den podpisu smlouvy o dílo originál bankovní "
             "záruky za provedení díla podle ustanovení čl. 7 Bankovní záruka, odst. 7.1. Obchodních podmínek "
             "objednatele na zhotovení stavby ze dne 1. 1. 2024. Objednatel potvrzuje podpisem smlouvy převzetí listiny."
         ) if bz_choice == "ANO" else (
@@ -30,7 +30,7 @@ def index():
 
         if vyh_choice == "ANO":
             vyh_text = (
-                "8.4.\tSmluvní strany se dohodly na vyhrazené změně závazku v souladu s ustanovením § 100 odst. 1 a § 222 odst. 2 "
+                "Smluvní strany se dohodly na vyhrazené změně závazku v souladu s ustanovením § 100 odst. 1 a § 222 odst. 2 "
                 "zákona č. 134/2016 Sb., o zadávání veřejných zakázek, ve znění pozdějších předpisů, spočívající v tom, že pokud u položek "
                 "uvedených v tabulce „Souhrn vyhrazených položek“ dojde k naměření jiného množství, než bylo předpokládáno výkazem výměr, platí "
                 "pro účely fakturace naměřená hodnota, avšak maximálně do výše limitů stanovených jako 50 % víceprací a 50 % méněprací v rámci všech podle tohoto dokumentu označených položek výkazu výměr. "
