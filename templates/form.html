@@ -86,6 +86,34 @@
         <option value="20 000 000">20 000 000 Kč</option>
       </select>
 
+      <label class="block mb-2">Listiny tvořící součást obsahu smlouvy o dílo</label>
+<div id="listiny-wrapper" class="mb-4 space-y-2">
+  <input type="text" name="listina_1" class="w-full p-2 border rounded" />
+  <input type="text" name="listina_2" class="w-full p-2 border rounded" />
+  <input type="text" name="listina_3" class="w-full p-2 border rounded" />
+</div>
+<input type="hidden" name="listiny_count" id="listiny_count" value="3" />
+<button type="button" onclick="pridatListinu()" class="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600 mb-4">
+  Vložit další pole
+</button>
+
+<script>
+  function pridatListinu() {
+    const wrapper = document.getElementById("listiny-wrapper");
+    const countInput = document.getElementById("listiny_count");
+    let count = parseInt(countInput.value);
+    count++;
+    countInput.value = count;
+
+    const input = document.createElement("input");
+    input.type = "text";
+    input.name = `listina_${count}`;
+    input.className = "w-full p-2 border rounded";
+    wrapper.appendChild(input);
+  }
+</script>
+
+      
       <!-- Vyhrazené položky -->
       <label class="block mb-2">Vyhrazené položky</label>
       <select name="vyh" id="vyh" required class="w-full mb-4 p-2 border rounded" onchange="toggleTable()">
@@ -93,54 +121,6 @@
         <option value="ANO">ANO</option>
       </select>
 
-      <div id="vyh-section" class="hidden">
-        <h2 class="text-lg font-semibold mt-4 mb-2">Souhrn vyhrazených položek</h2>
-        <table class="w-full border mb-2" id="vyh-table">
-          <thead>
-            <tr class="bg-gray-200">
-              <th class="p-2 border">Stavební objekty vyhrazených změn</th>
-              <th class="p-2 border">Položky vyhrazených změn</th>
-            </tr>
-          </thead>
-          <tbody id="vyh-rows">
-            <tr>
-              <td class="border p-1"><input type="text" name="so_1" class="w-full p-1 border rounded" /></td>
-              <td class="border p-1"><input type="text" name="polozky_1" class="w-full p-1 border rounded" /></td>
-            </tr>
-            <tr>
-              <td class="border p-1"><input type="text" name="so_2" class="w-full p-1 border rounded" /></td>
-              <td class="border p-1"><input type="text" name="polozky_2" class="w-full p-1 border rounded" /></td>
-            </tr>
-          </tbody>
-        </table>
-        <input type="hidden" id="vyh-count" name="vyh_count" value="2">
-        <button type="button" onclick="addRow()" class="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600">Vložit další řádek</button>
-      </div>
 
-      <button type="submit" class="w-full mt-6 bg-blue-600 text-white p-3 rounded hover:bg-blue-700">Vygenerovat smlouvu</button>
-    </form>
-  </div>
-
-  <script>
-    function toggleTable() {
-      const vyh = document.getElementById("vyh").value;
-      document.getElementById("vyh-section").classList.toggle("hidden", vyh !== "ANO");
-    }
-
-    function addRow() {
-      const table = document.getElementById("vyh-rows");
-      const countInput = document.getElementById("vyh-count");
-      let count = parseInt(countInput.value);
-      count++;
-      countInput.value = count;
-
-      const row = document.createElement("tr");
-      row.innerHTML = `
-        <td class="border p-1"><input type="text" name="so_${count}" class="w-full p-1 border rounded" /></td>
-        <td class="border p-1"><input type="text" name="polozky_${count}" class="w-full p-1 border rounded" /></td>
-      `;
-      table.appendChild(row);
-    }
-  </script>
 </body>
 </html>
