@@ -135,7 +135,8 @@ def index():
 
         }
 
-        doc = DocxTemplate("SOD_PS24.docx")
+        sablona = request.form["sablona"]
+        doc = DocxTemplate(sablona)
         try:
             doc.render(context)
         except Exception as e:
