@@ -9,12 +9,27 @@ app = Flask(__name__)
 @app.route("/", methods=["GET", "POST"])
 def index():
     if request.method == "POST":
+        # Rozhodnutí o bankovní záruce
+        bz_choice = request.form["bz"]
+        if bz_choice == "ANO":
+            bz_text = (
+                "6.1.\tZhotovitel předložil objednateli v den podpisu smlouvy o dílo originál bankovní "
+                "záruky za provedení díla podle ustanovení čl. 7 Bankovní záruka, odst. 7.1. Obchodních podmínek "
+                "objednatele na zhotovení stavby ze dne 1. 1. 2024. Objednatel potvrzuje podpisem smlouvy převzetí listiny."
+            )
+        else:
+            bz_text = (
+                "Objednatel nežádá zhotovitele o předložení bankovní záruky za provedení díla."
+            )
+
         context = {
             "cislo_akce": request.form["cislo_akce"],
             "nazev_akce": request.form["nazev_akce"],
             "vedouci": request.form["vedouci"],
             "dozor": request.form["dozor"],
             "zahajeni": request.form["zahajeni"],
+            "bz": bz_text,
+            "poj": request.form["poj"]
         }
 
         doc = DocxTemplate("SOD_PS24.docx")
