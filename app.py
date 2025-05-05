@@ -11,7 +11,7 @@ def index():
     if request.method == "POST":
         # Bankovní záruka
         bz_text = (
-            "6.1.\tZhotovitel předložil objednateli v den podpisu smlouvy o dílo originál bankovní "
+            "Zhotovitel předložil objednateli v den podpisu smlouvy o dílo originál bankovní "
             "záruky za provedení díla podle ustanovení čl. 7 Bankovní záruka, odst. 7.1. Obchodních podmínek "
             "objednatele na zhotovení stavby ze dne 1. 1. 2024. Objednatel potvrzuje podpisem smlouvy převzetí listiny."
         ) if request.form["bz"] == "ANO" else (
@@ -19,18 +19,22 @@ def index():
         )
 
         # Vyhrazené položky – text pouze, bez tabulky
-        vyh_text = ""
-        vyh_placeholder = ""
-        vz1 = ""
-        vz2 = ""
-        if request.form["vyh"] == "ANO":
-            vyh_text = (
-                "8.4.\tSmluvní strany se dohodly na vyhrazené změně závazku v souladu s ustanovením § 100 odst. 1 a § 222 odst. 2 "
-                "zákona č. 134/2016 Sb., o zadávání veřejných zakázek..."
-            )
-            vyh_placeholder = "Do vygenerované smlouvy vlož Souhrn vyhrazených položek"
-            vz1 = "(překročitelná jen při uplatnění vyhrazených změn v čl. 8.10. smlouvy a dále v režimu zákona)"
-            vz2 = "(jedná se o cenu díla před aktivací změn vyhrazených v čl. 8.10. smlouvy)"
+# Vyhrazené položky – text nebo "Vymaž..."
+vyh_text = ""
+vyh_placeholder = ""
+vz1 = ""
+vz2 = ""
+
+if request.form["vyh"] == "ANO":
+    vyh_text = (
+        "Smluvní strany se dohodly na vyhrazené změně závazku v souladu s ustanovením § 100 odst. 1 a § 222 odst. 2 zákona č. 134/2016 Sb., o zadávání veřejných zakázek, ve znění pozdějších předpisů, spočívající v tom, že pokud u položek uvedených v tabulce „Souhrn vyhrazených položek“ dojde k naměření jiného množství, než bylo předpokládáno výkazem výměr, platí pro účely fakturace naměřená hodnota, avšak maximálně do výše limitů stanovených jako 50 % víceprací a 50 % mé-něprací v rámci všech podle tohoto dokumentu označených položek výkazu výměr. Měření musí být evidováno ve formě Evidenčního listu vyhrazené změny, což je samostatný dokument obsahu-jící přehled skutečně naměřených množství jednotlivých položek výkazu výměr, pokud se liší od původního předpokladu, přičemž vyhrazené změny lze uplatnit pouze v souladu s uvedenými limi-ty."
+    )
+    vyh_placeholder = "Do vygenerované smlouvy vlož Souhrn vyhrazených položek"
+    vz1 = "(překročitelná jen při uplatnění vyhrazených změn v čl. 8.10. smlouvy a dále v režimu zákona)"
+    vz2 = "(jedná se o cenu díla před aktivací změn vyhrazených v čl. 8.10. smlouvy)"
+else:
+    vyh_text = "Vymaž tento odstavec"
+    vyh_placeholder = ""
 
         # Typ projektové dokumentace
         pd_map = {
