@@ -9,6 +9,26 @@ app = Flask(__name__)
 @app.route("/", methods=["GET", "POST"])
 def index():
     if request.method == "POST":
+        # Akce (více položek)
+        akce_count = int(request.form["akce_count"])
+        nazvy_akci = []
+        cisla_akci = []
+
+        for i in range(1, akce_count + 1):
+            nazev = request.form.get(f"nazev_akce_{i}")
+            cislo = request.form.get(f"cislo_akce_{i}")
+            if nazev:
+                nazvy_akci.append(nazev)
+            if cislo:
+                cisla_akci.append(cislo)
+
+        verejna_zakazka = request.form.get("verejna_zakazka", "").strip()
+        nazev_akce_final = nazvy_akci[0] if nazvy_akci else ""
+        if akce_count >= 2 and verejna_zakazka:
+            nazev_akce_final += f", veřejná zakázka: {verejna_zakazka}"
+
+        cislo_akce_final = ", ".join(cisla_akci)
+
         # Bankovní záruka
         bz_text = (
             "Zhotovitel předložil objednateli v den podpisu smlouvy o dílo originál bankovní "
@@ -25,7 +45,8 @@ def index():
         vz2 = ""
         if request.form["vyh"] == "ANO":
             vyh_text = (
-                "8.7.	Smluvní strany se dohodly na vyhrazené změně závazku v souladu s ustanovením § 100 odst. 1 a § 222 odst. 2 zákona č. 134/2016 Sb., o zadávání veřejných zakázek, ve znění pozdějších předpisů, spočívající v tom, že pokud u položek uvedených v tabulce „Souhrn vyhrazených položek“ dojde k naměření jiného množství, než bylo předpokládáno výkazem výměr, platí pro účely fakturace naměřená hodnota, avšak maximálně do výše limitů stanovených jako 50 % víceprací a 50 % mé-něprací v rámci všech podle tohoto dokumentu označených položek výkazu výměr. Měření musí být evidováno ve formě Evidenčního listu vyhrazené změny, což je samostatný dokument obsahu-jící přehled skutečně naměřených množství jednotlivých položek výkazu výměr, pokud se liší od původního předpokladu, přičemž vyhrazené změny lze uplatnit pouze v souladu s uvedenými limi-ty."
+                "8.7. Smluvní strany se dohodly na vyhrazené změně závazku v souladu s ustanovením § 100 odst. 1 a § 222 odst. 2 "
+                "zákona č. 134/2016 Sb., o zadávání veřejných zakázek, ve znění pozdějších předpisů..."
             )
             vyh_placeholder = "Do vygenerované smlouvy vlož Souhrn vyhrazených položek"
             vz1 = "(překročitelná jen při uplatnění vyhrazených změn v čl. 8.10. smlouvy a dále v režimu zákona)"
@@ -69,8 +90,8 @@ def index():
 
         # Kontext pro šablonu
         context = {
-            "cislo_akce": request.form["cislo_akce"],
-            "nazev_akce": request.form["nazev_akce"],
+            "nazev_akce": nazev_akce_final,
+            "cislo_akce": cislo_akce_final,
             "vedouci": request.form["vedouci"],
             "dozor": request.form["dozor"],
             "zahajeni": request.form["zahajeni"],
@@ -91,7 +112,11 @@ def index():
         }
 
         doc = DocxTemplate("SOD_PS24.docx")
-        doc.render(context)
+        try:
+            doc.render(context)
+        except Exception as e:
+            print("Chyba při generování šablony:", e)
+            raise
 
         output = io.BytesIO()
         doc.save(output)
