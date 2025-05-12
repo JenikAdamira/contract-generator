@@ -104,8 +104,9 @@ def index():
             val = request.form.get(f"negace_{i}")
             if val:
                 negace.append(val)
-        if bz_ne:
-            negace.append("čl. 7. Bankovní záruka")
+if bz_ne:
+    negace.insert(1 if len(negace) > 0 else 0, "čl. 7. Bankovní záruka")
+
 
         # Kontext pro šablonu
         context = {
