@@ -46,16 +46,26 @@ def index():
                 if cislo and nazev:
                     seznam_akci.append({"cislo": cislo, "nazev": nazev})
 
+# Bankovní záruka
+bz_text = (
+    "Zhotovitel předložil objednateli v den podpisu smlouvy o dílo originál bankovní "
+    "záruky za provedení díla podle ustanovení čl. 7 Bankovní záruka, odst. 7.1. Obchodních podmínek "
+    "objednatele na zhotovení stavby ze dne 1. 1. 2024. Objednatel potvrzuje podpisem smlouvy převzetí listiny."
+) if request.form["bz"] == "ANO" else (
+    "Objednatel nežádá zhotovitele o předložení bankovní záruky za provedení díla."
+)
 
-        # Bankovní záruka
-        bz_text = (
-            "Zhotovitel předložil objednateli v den podpisu smlouvy o dílo originál bankovní "
-            "záruky za provedení díla podle ustanovení čl. 7 Bankovní záruka, odst. 7.1. Obchodních podmínek "
-            "objednatele na zhotovení stavby ze dne 1. 1. 2024. Objednatel potvrzuje podpisem smlouvy převzetí listiny."
-        ) if request.form["bz"] == "ANO" else (
-            "Objednatel nežádá zhotovitele o předložení bankovní záruky za provedení díla."
-        )
+# Negace
+negace = []
+for i in range(1, int(request.form["negace_count"]) + 1):
+    val = request.form.get(f"negace_{i}")
+    if val:
+        negace.append(val)
 
+if request.form["bz"] == "NE":
+    negace.append("čl. 7. Bankovní záruka")
+
+    
         # Vyhrazené položky – text nebo výmaz
         vyh_text = ""
         vyh_placeholder = ""
