@@ -117,6 +117,7 @@
           <option value="ANO">ANO</option>
           <option value="NE">NE</option>
         </select>
+        <select name="bz" id="bz" onchange="zpracujBZ()" required class="w-full mb-4 p-2 border rounded">
       </div>
 
 <!-- Sekce: Listiny -->
@@ -154,7 +155,9 @@
     Vložit další pole
   </button>
 </div>
-
+<div id="bz-negace-auto" class="text-sm text-gray-600 italic hidden">
+  Automaticky bude doplněno: čl. 7. Bankovní záruka
+</div>
 
       <!-- Odesílací tlačítko -->
       <div>
@@ -223,5 +226,19 @@ function pridatNegaci() {
   }
 }
   </script>
+  <script>
+  function zpracujBZ() {
+    const bz = document.getElementById("bz").value;
+    const autoNegace = document.getElementById("bz-negace-auto");
+    if (bz === "NE") {
+      autoNegace.classList.remove("hidden");
+    } else {
+      autoNegace.classList.add("hidden");
+    }
+  }
+
+  // volání při načtení stránky – např. po refreshi
+  document.addEventListener("DOMContentLoaded", zpracujBZ);
+</script>
 </body>
 </html>
