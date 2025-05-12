@@ -110,14 +110,13 @@
         <input type="text" name="dokonceni_text" id="dokonceni_text" class="w-full mb-4 p-2 border rounded hidden" placeholder="Zadej vlastní text" />
       </div>
 
-      <!-- Sekce: Bankovní záruka -->
+<!-- Sekce: Bankovní záruka -->
       <div>
         <h2 class="text-xl font-semibold mb-2 text-gray-700 uppercase">Bankovní záruka</h2>
-        <select name="bz" required class="w-full mb-4 p-2 border rounded">
+        <select name="bz" id="bz" onchange="zpracujBZ()" required class="w-full mb-4 p-2 border rounded">
           <option value="ANO">ANO</option>
           <option value="NE">NE</option>
         </select>
-        <select name="bz" id="bz" onchange="zpracujBZ()" required class="w-full mb-4 p-2 border rounded">
       </div>
 
 <!-- Sekce: Listiny -->
@@ -143,23 +142,23 @@
         </select>
       </div>
 
-<!-- Sekce: Negace -->
-<div>
-  <label class="block text-sm font-semibold text-gray-700 mb-1">Negace ustanovení obchodních podmínek</label>
-  <div id="negace-wrapper" class="space-y-2 mb-2">
-    <textarea name="negace_1" rows="2" class="w-full p-2 border rounded resize-none">čl. 2. Všeobecné povinnosti zhotovitele, odst. 2.3., písm. a) Dokumentace, povodňové plány, geodetické práce, body 4., 5.</textarea>
-    <textarea name="negace_2" rows="2" class="w-full p-2 border rounded resize-none"></textarea>
-  </div>
-  <input type="hidden" name="negace_count" id="negace_count" value="2" />
-  <button type="button" onclick="pridatNegaci()" class="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600">
-    Vložit další pole
-  </button>
-</div>
-<div id="bz-negace-auto" class="text-sm text-gray-600 italic hidden">
-  Automaticky bude doplněno: čl. 7. Bankovní záruka
-</div>
+ <!-- Sekce: Negace -->
+      <div>
+        <label class="block text-sm font-semibold text-gray-700 mb-1">Negace ustanovení obchodních podmínek</label>
+        <div id="negace-wrapper" class="space-y-2 mb-2">
+          <textarea name="negace_1" rows="2" class="w-full p-2 border rounded resize-none">čl. 2. Všeobecné povinnosti zhotovitele, odst. 2.3., písm. a) Dokumentace, povodňové plány, geodetické práce, body 4., 5.</textarea>
+          <textarea name="negace_2" rows="2" class="w-full p-2 border rounded resize-none"></textarea>
+        </div>
+        <div id="bz-negace-auto" class="text-sm text-gray-600 italic hidden">
+          Automaticky bude doplněno: čl. 7. Bankovní záruka
+        </div>
+        <input type="hidden" name="negace_count" id="negace_count" value="2" />
+        <button type="button" onclick="pridatNegaci()" class="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600">
+          Vložit další pole
+        </button>
+      </div>
 
-      <!-- Odesílací tlačítko -->
+<!-- Odesílací tlačítko -->
       <div>
         <button type="submit" class="w-full mt-4 bg-blue-600 text-white p-3 rounded hover:bg-blue-700 text-lg">
           Vygenerovat smlouvu
@@ -169,76 +168,68 @@
   </div>
 
   <script>
-    function toggleDokonceni() {
-      const typ = document.getElementById("dokonceni_typ").value;
-      document.getElementById("dokonceni_datum").classList.toggle("hidden", typ !== "datum");
-      document.getElementById("dokonceni_text").classList.toggle("hidden", typ !== "text");
+    function zpracujBZ() {
+      const bz = document.getElementById("bz").value;
+      const autoNegace = document.getElementById("bz-negace-auto");
+      if (bz === "NE") {
+        autoNegace.classList.remove("hidden");
+      } else {
+        autoNegace.classList.add("hidden");
+      }
     }
 
-function pridatListinu() {
-  const wrapper = document.getElementById("listiny-wrapper");
-  const countInput = document.getElementById("listiny_count");
-  let count = parseInt(countInput.value);
-  count++;
-  countInput.value = count;
+    function pridatListinu() {
+      const wrapper = document.getElementById("listiny-wrapper");
+      const countInput = document.getElementById("listiny_count");
+      let count = parseInt(countInput.value);
+      count++;
+      countInput.value = count;
 
-  const textarea = document.createElement("textarea");
-  textarea.name = `listina_${count}`;
-  textarea.rows = 2;
-  textarea.className = "w-full p-2 border rounded resize-none";
-  wrapper.appendChild(textarea);
-}
+      const textarea = document.createElement("textarea");
+      textarea.name = `listina_${count}`;
+      textarea.rows = 2;
+      textarea.className = "w-full p-2 border rounded resize-none";
+      wrapper.appendChild(textarea);
+    }
 
-function pridatNegaci() {
-  const wrapper = document.getElementById("negace-wrapper");
-  const countInput = document.getElementById("negace_count");
-  let count = parseInt(countInput.value);
-  count++;
-  countInput.value = count;
+    function pridatNegaci() {
+      const wrapper = document.getElementById("negace-wrapper");
+      const countInput = document.getElementById("negace_count");
+      let count = parseInt(countInput.value);
+      count++;
+      countInput.value = count;
 
-  const textarea = document.createElement("textarea");
-  textarea.name = `negace_${count}`;
-  textarea.rows = 2;
-  textarea.className = "w-full p-2 border rounded resize-none";
-  wrapper.appendChild(textarea);
-}
+      const textarea = document.createElement("textarea");
+      textarea.name = `negace_${count}`;
+      textarea.rows = 2;
+      textarea.className = "w-full p-2 border rounded resize-none";
+      wrapper.appendChild(textarea);
+    }
+
     function pridatAkci() {
-  const wrapper = document.getElementById("akce-wrapper");
-  const countInput = document.getElementById("akce_count");
-  let count = parseInt(countInput.value);
-  count++;
+      const wrapper = document.getElementById("akce-wrapper");
+      const countInput = document.getElementById("akce_count");
+      let count = parseInt(countInput.value);
+      count++;
 
-  const div = document.createElement("div");
+      const div = document.createElement("div");
 
-  div.innerHTML = `
-    <label class="block text-sm font-semibold text-gray-700 mb-1">Název akce</label>
-    <input type="text" name="nazev_akce_${count}" class="w-full mb-2 p-2 border rounded" />
-    <label class="block text-sm font-semibold text-gray-700 mb-1">Číslo akce</label>
-    <input type="text" name="cislo_akce_${count}" class="w-full p-2 border rounded" />
-  `;
+      div.innerHTML = `
+        <label class="block text-sm font-semibold text-gray-700 mb-1">Název akce</label>
+        <input type="text" name="nazev_akce_${count}" class="w-full mb-2 p-2 border rounded" />
+        <label class="block text-sm font-semibold text-gray-700 mb-1">Číslo akce</label>
+        <input type="text" name="cislo_akce_${count}" class="w-full p-2 border rounded" />
+      `;
 
-  wrapper.appendChild(div);
-  countInput.value = count;
+      wrapper.appendChild(div);
+      countInput.value = count;
 
-  // Zobraz veřejnou zakázku, pokud je víc než 1 akce
-  if (count >= 2) {
-    document.getElementById("verejna-zakazka-field").classList.remove("hidden");
-  }
-}
-  </script>
-  <script>
-  function zpracujBZ() {
-    const bz = document.getElementById("bz").value;
-    const autoNegace = document.getElementById("bz-negace-auto");
-    if (bz === "NE") {
-      autoNegace.classList.remove("hidden");
-    } else {
-      autoNegace.classList.add("hidden");
+      if (count >= 2) {
+        document.getElementById("verejna-zakazka-field").classList.remove("hidden");
+      }
     }
-  }
 
-  // volání při načtení stránky – např. po refreshi
-  document.addEventListener("DOMContentLoaded", zpracujBZ);
-</script>
+    document.addEventListener("DOMContentLoaded", zpracujBZ);
+  </script>
 </body>
 </html>
