@@ -144,7 +144,7 @@
 
       <!-- Sekce: Negace -->
       <div>
-        <h2 class="text-sm font-semibold text-gray-700 mb-1">Negace ustanovení obchodních podmínek</h2>
+        <h2 class="text-xl font-semibold text-gray-700 mb-1">Negace ustanovení obchodních podmínek</h2>
 
       <!-- Rozšířené otázky s ANO/NE -->
       <div class="mt-4 space-y-4">
@@ -179,7 +179,7 @@
         <!-- Textová pole pro vlastní negace -->
 <div class="mt-4">
   <div id="negace-wrapper" class="space-y-2 mb-2">
-<h2 class="text-xl font-semibold mb-2 text-gray-700 uppercase">Další ustanovení obchodních podmínek</h2>
+<h2 class="text-sm font-semibold mb-2 text-gray-700 uppercase">Další ustanovení obchodních podmínek</h2>
     <textarea name="negace_1" rows="2" class="w-full p-2 border rounded resize-none"></textarea>
     <textarea name="negace_2" rows="2" class="w-full p-2 border rounded resize-none"></textarea>
   </div>
@@ -256,6 +256,22 @@
   document.addEventListener("DOMContentLoaded", zobrazNegace);
 
     document.addEventListener("DOMContentLoaded", zobrazNegace);
+    
+    function toggleDokonceni() {
+  const typ = document.getElementById("dokonceni_typ").value;
+  const datum = document.getElementById("dokonceni_datum");
+  const text = document.getElementById("dokonceni_text");
+
+  if (typ === "datum") {
+    datum.classList.remove("hidden");
+    text.classList.add("hidden");
+  } else {
+    datum.classList.add("hidden");
+    text.classList.remove("hidden");
+  }
+}
+
+document.addEventListener("DOMContentLoaded", toggleDokonceni);
 
     function pridatAkci() {
       const wrapper = document.getElementById("akce-wrapper");
