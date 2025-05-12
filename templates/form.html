@@ -151,36 +151,44 @@
 <div id="negace-wrapper" class="space-y-2 mb-2">
     </div>
 
-  <!-- Další možné negace formou otázek -->
-  <div class="mt-4 space-y-4">
-    <h3 class="text-sm font-semibold text-gray-700">Vybrané oblasti k negaci</h3>
+<!-- Další možné negace formou otázek -->
+<div class="mt-4 space-y-4">
+  <h3 class="text-sm font-semibold text-gray-700">Vybrané oblasti k negaci</h3>
 
-    <div class="flex items-center gap-4">
-      <label class="text-gray-700">Geometrické plány</label>
-      <label><input type="radio" name="neg_geom" value="ANO" required /> Ano</label>
-      <label><input type="radio" name="neg_geom" value="NE" /> Ne</label>
-    </div>
+  <div class="grid grid-cols-3 gap-4 items-center">
+    <label class="text-gray-700">Geometrické plány</label>
+    <label><input type="radio" name="neg_geom" value="ANO" onchange="zobrazNegace()" required> Ano</label>
+    <label><input type="radio" name="neg_geom" value="NE" onchange="zobrazNegace()"> Ne</label>
 
-    <div class="flex items-center gap-4">
-      <label class="text-gray-700">Kácení</label>
-      <label><input type="radio" name="neg_kaceni" value="ANO" required /> Ano</label>
-      <label><input type="radio" name="neg_kaceni" value="NE" /> Ne</label>
-    </div>
+    <label class="text-gray-700">Kácení</label>
+    <label><input type="radio" name="neg_kaceni" value="ANO" onchange="zobrazNegace()" required> Ano</label>
+    <label><input type="radio" name="neg_kaceni" value="NE" onchange="zobrazNegace()"> Ne</label>
 
-    <div class="flex items-center gap-4">
-      <label class="text-gray-700">Průzkum ZCHDŽ</label>
-      <label><input type="radio" name="neg_pruzkum" value="ANO" required /> Ano</label>
-      <label><input type="radio" name="neg_pruzkum" value="NE" /> Ne</label>
-    </div>
+    <label class="text-gray-700">Průzkum ZCHDŽ</label>
+    <label><input type="radio" name="neg_pruzkum" value="ANO" onchange="zobrazNegace()" required> Ano</label>
+    <label><input type="radio" name="neg_pruzkum" value="NE" onchange="zobrazNegace()"> Ne</label>
 
-    <div class="flex items-center gap-4">
-      <label class="text-gray-700">Dotace</label>
-      <label><input type="radio" name="neg_dotace" value="ANO" required /> Ano</label>
-      <label><input type="radio" name="neg_dotace" value="NE" /> Ne</label>
-    </div>
+    <label class="text-gray-700">Bankovní záruka</label>
+    <label><input type="radio" name="bz" id="bz-ano" value="ANO" onchange="zobrazNegace()" required> Ano</label>
+    <label><input type="radio" name="bz" id="bz-ne" value="NE" onchange="zobrazNegace()"> Ne</label>
+
+    <label class="text-gray-700">Dotační podmínky</label>
+    <label><input type="radio" name="neg_dotace" value="ANO" onchange="zobrazNegace()" required> Ano</label>
+    <label><input type="radio" name="neg_dotace" value="NE" onchange="zobrazNegace()"> Ne</label>
   </div>
 
-          <textarea name="negace_1" rows="2" class="w-full p-2 border rounded resize-none">čl. 2. Všeobecné povinnosti zhotovitele, odst. 2.3., písm. a) Dokumentace, povodňové plány, geodetické práce, body 4., 5.</textarea>
+  <!-- Zobrazované texty negací -->
+  <div id="zobrazene-negace" class="mt-6 bg-gray-50 p-4 border rounded text-sm text-gray-700 space-y-1">
+    <strong class="block mb-2 text-gray-800">Bude doplněno do negací:</strong>
+    <div id="negace_geom" class="hidden">– čl. 2. Všeobecné povinnosti zhotovitele, odst. 2.3., písm. a) Dokumentace, povodňové plány, geodetické práce, body 4., 5.</div>
+    <div id="negace_kaceni" class="hidden">– čl. 2. Všeobecné povinnosti zhotovitele, odst. 2.3., písm. f) Ostatní podmínky, bod 35.</div>
+    <div id="negace_pruzkum" class="hidden">– čl. 2. Všeobecné povinnosti zhotovitele, odst. 2.3., písm. f) Ostatní podmínky, bod 38.</div>
+    <div id="negace_bz" class="hidden">– čl. 7. Bankovní záruka</div>
+    <div id="negace_dotace" class="hidden">– čl. 14. Odstoupení od smlouvy, odst. 14.3 a 14.4.</div>
+  </div>
+</div>
+
+          <textarea name="negace_1" rows="2" class="w-full p-2 border rounded resize-none">Další položky k negaci</textarea>
           <textarea name="negace_2" rows="2" class="w-full p-2 border rounded resize-none"></textarea>
         </div>
         <div id="bz-negace-auto" class="text-sm text-gray-600 italic hidden">
