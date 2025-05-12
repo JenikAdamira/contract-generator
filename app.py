@@ -67,7 +67,7 @@ if request.form["bz"] == "NE":
 
     
         # Vyhrazené položky – text nebo výmaz
-        vyh_text = ""
+    vyh_text = ""
         vyh_placeholder = ""
         vz1 = ""
         vz2 = ""
