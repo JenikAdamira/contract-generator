@@ -104,8 +104,22 @@ def index():
             val = request.form.get(f"negace_{i}")
             if val:
                 negace.append(val)
+        # Automatické doplnění dalších negací na základě výběru
         if bz_ne:
             negace.insert(1 if len(negace) > 0 else 0, "čl. 7. Bankovní záruka")
+
+        if request.form.get("neg_geom") == "ANO":
+            negace.append("čl. 2. Všeobecné povinnosti zhotovitele, odst. 2.3., písm. a) Dokumentace, povodňové plány, geodetické práce, body 4., 5.")
+
+        if request.form.get("neg_kaceni") == "ANO":
+            negace.append("čl. 2. Všeobecné povinnosti zhotovitele, odst. 2.3., písm. f) Ostatní podmínky, bod 35.")
+
+        if request.form.get("neg_pruzkum") == "ANO":
+            negace.append("čl. 2. Všeobecné povinnosti zhotovitele, odst. 2.3., písm. f) Ostatní podmínky, bod 38.")
+
+        if request.form.get("neg_dotace") == "ANO":
+            negace.append("čl. 14. Odstoupení od smlouvy, odst. 14.3 a 14.4.")
+
 
         # Kontext pro šablonu
         context = {
