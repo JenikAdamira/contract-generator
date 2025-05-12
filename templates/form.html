@@ -145,15 +145,6 @@
       <!-- Sekce: Negace -->
       <div>
         <h2 class="text-sm font-semibold text-gray-700 mb-1">Negace ustanovení obchodních podmínek</h2>
-        <div id="negace-wrapper" class="space-y-2 mb-2">
-          <textarea name="negace_1" rows="2" class="w-full p-2 border rounded resize-none">čl. 2. Všeobecné povinnosti zhotovitele, odst. 2.3., písm. a) Dokumentace, povodňové plány, geodetické práce, body 4., 5.</textarea>
-          <textarea name="negace_2" rows="2" class="w-full p-2 border rounded resize-none"></textarea>
-        </div>
-        <input type="hidden" name="negace_count" id="negace_count" value="2" />
-        <button type="button" onclick="pridatNegaci()" class="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600">
-          Vložit další pole
-        </button>
-      </div>
 
       <!-- Rozšířené otázky s ANO/NE -->
       <div class="mt-4 space-y-4">
@@ -172,10 +163,6 @@
           <label><input type="radio" name="neg_pruzkum" value="ANO" onchange="zobrazNegace()" required> Ano</label>
           <label><input type="radio" name="neg_pruzkum" value="NE" onchange="zobrazNegace()"> Ne</label>
 
-          <label class="text-gray-700">Bankovní záruka</label>
-          <label><input type="radio" name="bz" id="bz-ano" value="ANO" onchange="zobrazNegace()" required> Ano</label>
-          <label><input type="radio" name="bz" id="bz-ne" value="NE" onchange="zobrazNegace()"> Ne</label>
-
           <label class="text-gray-700">Dotační podmínky</label>
           <label><input type="radio" name="neg_dotace" value="ANO" onchange="zobrazNegace()" required> Ano</label>
           <label><input type="radio" name="neg_dotace" value="NE" onchange="zobrazNegace()"> Ne</label>
@@ -190,6 +177,17 @@
           <div id="negace_bz" class="hidden">– čl. 7. Bankovní záruka</div>
           <div id="negace_dotace" class="hidden">– čl. 14. Odstoupení od smlouvy, odst. 14.3 a 14.4.</div>
         </div>
+        <!-- Textová pole pro vlastní negace -->
+<div class="mt-4">
+  <div id="negace-wrapper" class="space-y-2 mb-2">
+    <textarea name="negace_1" rows="2" class="w-full p-2 border rounded resize-none"></textarea>
+    <textarea name="negace_2" rows="2" class="w-full p-2 border rounded resize-none"></textarea>
+  </div>
+  <input type="hidden" name="negace_count" id="negace_count" value="2" />
+  <button type="button" onclick="pridatNegaci()" class="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600">
+    Vložit další pole
+  </button>
+</div>
       </div>
 
       <!-- Odesílací tlačítko -->
@@ -240,15 +238,18 @@
       wrapper.appendChild(textarea);
     }
 
-    function zobrazNegace() {
-      const z = (id, show) => document.getElementById(id).classList.toggle("hidden", !show);
+function zobrazNegace() {
+  const z = (id, show) => document.getElementById(id).classList.toggle("hidden", !show);
 
-      z("negace_geom", document.querySelector('input[name="neg_geom"]:checked')?.value === "ANO");
-      z("negace_kaceni", document.querySelector('input[name="neg_kaceni"]:checked')?.value === "ANO");
-      z("negace_pruzkum", document.querySelector('input[name="neg_pruzkum"]:checked')?.value === "ANO");
-      z("negace_bz", document.getElementById("bz-ne")?.checked);
-      z("negace_dotace", document.querySelector('input[name="neg_dotace"]:checked')?.value === "ANO");
-    }
+  z("negace_geom", document.querySelector('input[name="neg_geom"]:checked')?.value === "NE");
+  z("negace_kaceni", document.querySelector('input[name="neg_kaceni"]:checked')?.value === "NE");
+  z("negace_pruzkum", document.querySelector('input[name="neg_pruzkum"]:checked')?.value === "NE");
+  z("negace_dotace", document.querySelector('input[name="neg_dotace"]:checked')?.value === "NE");
+
+  // bankovní záruka – výběr z <select name="bz">
+  const bzSelect = document.getElementById("bz");
+  z("negace_bz", bzSelect?.value === "NE");
+}
 
     document.addEventListener("DOMContentLoaded", zobrazNegace);
 
