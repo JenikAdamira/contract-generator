@@ -148,7 +148,6 @@
 
       <!-- Rozšířené otázky s ANO/NE -->
       <div class="mt-4 space-y-4">
-        <h3 class="text-sm font-semibold text-gray-700">Vybrané oblasti k negaci</h3>
 
         <div class="grid grid-cols-3 gap-4 items-center">
           <label class="text-gray-700">Geometrické plány</label>
@@ -180,6 +179,7 @@
         <!-- Textová pole pro vlastní negace -->
 <div class="mt-4">
   <div id="negace-wrapper" class="space-y-2 mb-2">
+<h2 class="text-xl font-semibold mb-2 text-gray-700 uppercase">Další ustanovení obchodních podmínek</h2>
     <textarea name="negace_1" rows="2" class="w-full p-2 border rounded resize-none"></textarea>
     <textarea name="negace_2" rows="2" class="w-full p-2 border rounded resize-none"></textarea>
   </div>
@@ -238,18 +238,22 @@
       wrapper.appendChild(textarea);
     }
 
-function zobrazNegace() {
-  const z = (id, show) => document.getElementById(id).classList.toggle("hidden", !show);
+  function zobrazNegace() {
+    const z = (id, show) => {
+      const el = document.getElementById(id);
+      if (el) el.classList.toggle("hidden", !show);
+    };
 
-  z("negace_geom", document.querySelector('input[name="neg_geom"]:checked')?.value === "NE");
-  z("negace_kaceni", document.querySelector('input[name="neg_kaceni"]:checked')?.value === "NE");
-  z("negace_pruzkum", document.querySelector('input[name="neg_pruzkum"]:checked')?.value === "NE");
-  z("negace_dotace", document.querySelector('input[name="neg_dotace"]:checked')?.value === "NE");
+    z("negace_geom", document.querySelector('input[name="neg_geom"]:checked')?.value === "NE");
+    z("negace_kaceni", document.querySelector('input[name="neg_kaceni"]:checked')?.value === "NE");
+    z("negace_pruzkum", document.querySelector('input[name="neg_pruzkum"]:checked')?.value === "NE");
+    z("negace_dotace", document.querySelector('input[name="neg_dotace"]:checked')?.value === "NE");
 
-  // bankovní záruka – výběr z <select name="bz">
-  const bzSelect = document.getElementById("bz");
-  z("negace_bz", bzSelect?.value === "NE");
-}
+    const bz = document.getElementById("bz")?.value;
+    z("negace_bz", bz === "NE");
+  }
+
+  document.addEventListener("DOMContentLoaded", zobrazNegace);
 
     document.addEventListener("DOMContentLoaded", zobrazNegace);
 
