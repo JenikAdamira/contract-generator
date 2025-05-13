@@ -34,7 +34,7 @@ def index():
         # vice_akci – seznam textu
         vice_akci = ""
         if akce_count >= 2:
-            vice_akci = "které se skládá ze dvou níže uvedených jednotlivých akcí:\n"
+            vice_akci = "která se skládá ze dvou níže uvedených jednotlivých akcí:\n"
             for cislo, nazev in zip(cisla_akci, nazvy_akci):
                 if cislo and nazev:
                     vice_akci += f"č. {cislo} {nazev}\n"
