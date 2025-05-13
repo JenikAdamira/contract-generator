@@ -9,7 +9,6 @@ app = Flask(__name__)
 @app.route("/", methods=["GET", "POST"])
 def index():
     if request.method == "POST":
-        # Akce (více položek)
         akce_count = int(request.form["akce_count"])
         nazvy_akci = []
         cisla_akci = []
@@ -31,7 +30,6 @@ def index():
 
         cislo_akce_final = ", ".join(cisla_akci)
 
-        # vice_akci – seznam textu
         vice_akci = ""
         if akce_count >= 2:
             vice_akci = "která se skládá ze dvou níže uvedených jednotlivých akcí:\n"
@@ -39,47 +37,54 @@ def index():
                 if cislo and nazev:
                     vice_akci += f"č. {cislo} {nazev}\n"
 
-        # seznam_akci – volitelné pro budoucí použití (např. se smyčkou ve Wordu)
         seznam_akci = []
         if akce_count >= 2:
             for cislo, nazev in zip(cisla_akci, nazvy_akci):
                 if cislo and nazev:
                     seznam_akci.append({"cislo": cislo, "nazev": nazev})
 
-        # Bankovní záruka
         bz_ne = request.form["bz"] == "NE"
         bz_text = (
-            "Zhotovitel předložil objednateli v den podpisu smlouvy o dílo originál bankovní "
-            "záruky za provedení díla podle ustanovení čl. 7 Bankovní záruka, odst. 7.1. Obchodních podmínek "
-            "objednatele na zhotovení stavby ze dne 1. 1. 2024. Objednatel potvrzuje podpisem smlouvy převzetí listiny."
-        ) if not bz_ne else (
+            "Zhotovitel předložil objednateli..." if not bz_ne else
             "Objednatel nežádá zhotovitele o předložení bankovní záruky za provedení díla."
         )
 
-        # Vyhrazené položky – text nebo výmaz
         vyh_text = ""
         vyh_placeholder = ""
         vz1 = ""
         vz2 = ""
         if request.form["vyh"] == "ANO":
-            vyh_text = (
-                "Smluvní strany se dohodly na vyhrazené změně závazku v souladu s ustanovením § 100 odst. 1 a § 222 odst. 2 zákona č. 134/2016 Sb., o zadávání veřejných zakázek, ve znění pozdějších předpisů, spočívající v tom, že pokud u položek uvedených v tabulce „Souhrn vyhrazených položek“ dojde k naměření jiného množství, než bylo předpokládáno výkazem výměr, platí pro účely fakturace naměřená hodnota, avšak maximálně do výše limitů stanovených jako 50 % víceprací a 50 % méněprací v rámci všech podle tohoto dokumentu označených položek výkazu výměr. Měření musí být evidováno ve formě Evidenčního listu vyhrazené změny, což je samostatný dokument obsahující přehled skutečně naměřených množství jednotlivých položek výkazu výměr, pokud se liší od původního předpokladu, přičemž vyhrazené změny lze uplatnit pouze v souladu s uvedenými limity."
-            )
+            vyh_text = "Smluvní strany se dohodly na vyhrazené změně závazku..."
             vyh_placeholder = "Do vygenerované smlouvy vlož Souhrn vyhrazených položek"
-            vz1 = "(překročitelná jen při uplatnění vyhrazených změn v čl. 8.10. smlouvy a dále v režimu zákona)"
-            vz2 = "(jedná se o cenu díla před aktivací změn vyhrazených v čl. 8.10. smlouvy)"
+            vz1 = "(překročitelná jen při uplatnění vyhrazených změn...)"
+            vz2 = "(jedná se o cenu díla před aktivací změn...)"
         else:
             vyh_text = "Vymaž tento odstavec"
-            vyh_placeholder = ""
 
-        # Typ projektové dokumentace
         pd_map = {
             "zjednodusena": "zjednodušenou projektovou dokumentací",
             "provadeci": "projektovou dokumentací pro provedení stavby"
         }
-        pd_text = pd_map.get(request.form["pd"], "")
 
-        # Termín dokončení díla
+        pds = []
+        pd_count = int(request.form.get("pd_count", 1))
+        for i in range(1, pd_count + 1):
+            typ = request.form.get(f"pd_{i}")
+            pd_typ_text = pd_map.get(typ, "")
+            rok = request.form.get(f"pdrok_{i}")
+            spolecnost = request.form.get(f"pdspolecnost_{i}")
+            sidlo = request.form.get(f"pdsidlo_{i}")
+            projektant = request.form.get(f"pdproj_{i}")
+            if pd_typ_text and rok and spolecnost and sidlo and projektant:
+                pds.append({
+                    "typ": pd_typ_text,
+                    "rok": rok,
+                    "spolecnost": spolecnost,
+                    "sidlo": sidlo,
+                    "projektant": projektant,
+                    "akce": nazev_akce_final
+                })
+
         if request.form["dokonceni_typ"] == "datum":
             datum_raw = request.form["dokonceni_datum"]
             try:
@@ -91,37 +96,29 @@ def index():
         else:
             dokonceni = request.form["dokonceni_text"]
 
-        # Listiny
         listiny = []
         for i in range(1, int(request.form["listiny_count"]) + 1):
             val = request.form.get(f"listina_{i}")
             if val:
                 listiny.append(val)
 
-        # Negace – ve správném pořadí
         negace = []
-
         if request.form.get("neg_geom") == "NE":
-            negace.append("čl. 2. Všeobecné povinnosti zhotovitele, odst. 2.3., písm. a) Dokumentace, povodňové plány, geodetické práce, body 4., 5.")
-
+            negace.append("čl. 2... Dokumentace, geodetické práce...")
         if request.form.get("neg_kaceni") == "NE":
-            negace.append("čl. 2. Všeobecné povinnosti zhotovitele, odst. 2.3., písm. f) Ostatní podmínky, bod 35.")
-
+            negace.append("čl. 2... kácení...")
         if request.form.get("neg_pruzkum") == "NE":
-            negace.append("čl. 2. Všeobecné povinnosti zhotovitele, odst. 2.3., písm. f) Ostatní podmínky, bod 38.")
-
+            negace.append("čl. 2... průzkum ZCHDŽ...")
         if bz_ne:
             negace.append("čl. 7. Bankovní záruka")
-
         if request.form.get("neg_dotace") == "NE":
-            negace.append("čl. 14. Odstoupení od smlouvy, odst. 14.3 a 14.4.")
+            negace.append("čl. 14. Odstoupení od smlouvy...")
 
         for i in range(1, int(request.form["negace_count"]) + 1):
             val = request.form.get(f"negace_{i}")
             if val:
                 negace.append(val)
 
-        # Kontext pro šablonu
         context = {
             "nazev_akce": nazev_akce_final,
             "cislo_akce": cislo_akce_final,
@@ -134,25 +131,17 @@ def index():
             "vyh_placeholder": vyh_placeholder,
             "vz1": vz1,
             "vz2": vz2,
-            "pd": pd_text,
-            "pdrok": request.form["pdrok"],
-            "pdspolecnost": request.form["pdspolecnost"],
-            "pdsidlo": request.form["pdsidlo"],
-            "pdproj": request.form["pdproj"],
             "dokonceni": dokonceni,
             "listiny": listiny,
             "negace": negace,
             "vice_akci": vice_akci.strip(),
             "seznam_akci": seznam_akci,
+            "pd_seznam": pds,
         }
 
         sablona = request.form["sablona"]
         doc = DocxTemplate(sablona)
-        try:
-            doc.render(context)
-        except Exception as e:
-            print("Chyba při generování šablony:", e)
-            raise
+        doc.render(context)
 
         output = io.BytesIO()
         doc.save(output)
