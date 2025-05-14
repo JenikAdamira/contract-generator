@@ -96,14 +96,22 @@ def index():
         listiny = [request.form.get(f"listina_{i}") for i in range(1, int(request.form["listiny_count"]) + 1) if request.form.get(f"listina_{i}")]
 
         negace = []
+
         if request.form.get("neg_geom") == "NE":
-            negace.append("čl. 2. Všeobecné povinnosti zhotovitele, odst. 2.3., písm. a) Dokumentace, povodňové plány, geodetické práce, body 4., 5.")
+            geom_negace = "čl. 2. Všeobecné povinnosti zhotovitele, odst. 2.3., písm. a) Dokumentace, povodňové plány, geodetické práce, body 4., 5."
+            geom_predani = "čl. 12. Předání díla, odst. 12.2., písm. c)"
+            negace.append(geom_negace)
         if request.form.get("neg_kaceni") == "NE":
             negace.append("čl. 2. Všeobecné povinnosti zhotovitele, odst. 2.3., písm. f) Ostatní podmínky, bod 35")
         if request.form.get("neg_pruzkum") == "NE":
             negace.append("čl. 2. Všeobecné povinnosti zhotovitele, odst. 2.3., písm. f) Ostatní podmínky, bod 38")
+
         if bz_ne:
             negace.append("čl. 7. Bankovní záruka")
+
+        if request.form.get("neg_geom") == "NE":
+            negace.append(geom_predani)
+
         if request.form.get("neg_dotace") == "NE":
             negace.append("čl. 14. Odstoupení od smlouvy, odst. 14. 3. a 14. 4.")
 
