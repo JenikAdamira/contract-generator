@@ -56,24 +56,25 @@ def index():
             "provadeci": "projektovou dokumentací pro provedení stavby"
         }
 
-        pds = []
-        pd_count = int(request.form.get("pd_count", 1))
-        for i in range(1, pd_count + 1):
-            typ = request.form.get(f"pd_{i}")
-            pd_typ_text = pd_map.get(typ, "")
-            rok = request.form.get(f"pdrok_{i}")
-            spolecnost = request.form.get(f"pdspolecnost_{i}")
-            sidlo = request.form.get(f"pdsidlo_{i}")
-            projektant = request.form.get(f"pdproj_{i}")
-            if pd_typ_text and rok and spolecnost and sidlo and projektant:
-                pds.append({
-                    "typ": pd_typ_text,
-                    "rok": rok,
-                    "spolecnost": spolecnost,
-                    "sidlo": sidlo,
-                    "projektant": projektant,
-                    "akce": nazev_akce_final
-                })
+pds = []
+pd_count = int(request.form.get("pd_count", 1))
+for i in range(1, pd_count + 1):
+    typ = request.form.get("pd" if i == 1 else f"pd_{i}")
+    rok = request.form.get("pdrok" if i == 1 else f"pdrok_{i}")
+    spolecnost = request.form.get("pdspolecnost" if i == 1 else f"pdspolecnost_{i}")
+    sidlo = request.form.get("pdsidlo" if i == 1 else f"pdsidlo_{i}")
+    projektant = request.form.get("pdproj" if i == 1 else f"pdproj_{i}")
+    pd_typ_text = pd_map.get(typ, "")
+    
+    if pd_typ_text and rok and spolecnost and sidlo and projektant:
+        pds.append({
+            "typ": pd_typ_text,
+            "rok": rok,
+            "spolecnost": spolecnost,
+            "sidlo": sidlo,
+            "projektant": projektant,
+            "akce": nazev_akce_final
+        })
 
         projekt_parts = [
             f'{pd["typ"]} vypracovanou v roce {pd["rok"]} společností {pd["spolecnost"]}, se sídlem {pd["sidlo"]}, zodpovědný projektant {pd["projektant"]}'
