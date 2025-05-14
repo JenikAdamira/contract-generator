@@ -92,7 +92,6 @@ for pd in pds:
     )
 projekt_text = " a ".join(projekt_parts)
 
-
         if request.form["dokonceni_typ"] == "datum":
             datum_raw = request.form["dokonceni_datum"]
             try:
