@@ -35,8 +35,7 @@ def index():
 
         bz_ne = request.form["bz"] == "NE"
         bz_text = (
-            "Zhotovitel předložil objednateli v den podpisu smlouvy o dílo originál bankovní záruky za provedení díla v souladu se zněním čl. 7. Bankovní záruka, odst. 7.1. Obchodních podmínek na zhotovení stavby ze dne 1. 1. 2024. Objednatel potvrzuje podpisem smlouvy převzetí listiny."
-            if not bz_ne else
+            "Zhotovitel předložil objednateli v den podpisu smlouvy o dílo originál bankovní záruky za pro-vedení díla v souladu se zněním čl. 7. Bankovní záruka, odst. 7.1. Obchodních podmínek na zho-tovení stavby ze dne 1. 1. 2024. Objednatel potvrzuje podpisem smlouvy převzetí listiny." if not bz_ne else
             "Objednatel nežádá zhotovitele o předložení bankovní záruky za provedení díla."
         )
 
@@ -60,13 +59,12 @@ def index():
         pds = []
         pd_count = int(request.form.get("pd_count", 1))
         for i in range(1, pd_count + 1):
-            typ = request.form.get("pd" if i == 1 else f"pd_{i}")
-            rok = request.form.get("pdrok" if i == 1 else f"pdrok_{i}")
-            spolecnost = request.form.get("pdspolecnost" if i == 1 else f"pdspolecnost_{i}")
-            sidlo = request.form.get("pdsidlo" if i == 1 else f"pdsidlo_{i}")
-            projektant = request.form.get("pdproj" if i == 1 else f"pdproj_{i}")
+            typ = request.form.get(f"pd_{i}")
             pd_typ_text = pd_map.get(typ, "")
-
+            rok = request.form.get(f"pdrok_{i}")
+            spolecnost = request.form.get(f"pdspolecnost_{i}")
+            sidlo = request.form.get(f"pdsidlo_{i}")
+            projektant = request.form.get(f"pdproj_{i}")
             if pd_typ_text and rok and spolecnost and sidlo and projektant:
                 pds.append({
                     "typ": pd_typ_text,
@@ -90,14 +88,17 @@ def index():
                 datum_cz = parsed.strftime("%d.%m.%Y")
                 dokonceni = f"nejpozději do {datum_cz}"
             except ValueError:
-                dokonceni = f"nejpozději do {datum_raw} (chybný formát data)"
+                dokonceni = f"nejpozději do {datum_raw} (chybný formát data)" # Lepší indikace chyby
+                print(f"Chyba při parsování data: {datum_raw}") # Volitelné logování chyby
         else:
             dokonceni = request.form["dokonceni_text"]
 
         listiny = [request.form.get(f"listina_{i}") for i in range(1, int(request.form["listiny_count"]) + 1) if request.form.get(f"listina_{i}")]
 
+        
         negace = []
 
+        # čl. 2 – základní negace
         if request.form.get("neg_geom") == "NE":
             negace.append("čl. 2. Všeobecné povinnosti zhotovitele, odst. 2.3., písm. a) Dokumentace, povodňové plány, geodetické práce, body 4., 5.")
         if request.form.get("neg_kaceni") == "NE":
@@ -107,18 +108,12 @@ def index():
         if request.form.get("neg_kzp") == "NE":
             negace.append("čl. 2. Všeobecné povinnosti zhotovitele, odst. 2.3., písm. f) Ostatní podmínky, bod 45")
 
+        # čl. 7 – Bankovní záruka
         if bz_ne:
             negace.append("čl. 7. Bankovní záruka")
 
+        # čl. 12 – Předání díla, odst. 12.2., písm. ...
         cl_12_pismena = []
-        if request.form.get("neg_geom") == "NE":
-            cl_12_pismena.append("c)")
-        if request.form.get("neg_kzp") == "NE":
-            cl_12_pismena.append("e)")
-        if request.form.get("neg_reviz") == "NE":
-            cl_12_pismena.append("m)")
-
-cl_12_pismena = []
         if request.form.get("neg_geom") == "NE":
             cl_12_pismena.append("c)")
         if request.form.get("neg_kzp") == "NE":
@@ -134,6 +129,24 @@ cl_12_pismena = []
             pismena_text = spoj_pismena(cl_12_pismena)
             negace.append(f"čl. 12. Předání díla, odst. 12.2., písm. {pismena_text}")
 
+        # čl. 14 – Dotace
+        if request.form.get("neg_dotace") == "NE":
+            negace.append("čl. 14. Odstoupení od smlouvy, odst. 14. 3. a 14. 4.")
+
+        # vlastní textová pole
+        for i in range(1, int(request.form["negace_count"]) + 1):
+            val = request.form.get(f"negace_{i}")
+            if val:
+                negace.append(val)
+
+        if request.form.get("neg_geom") == "NE":
+            negace.append("čl. 2. Všeobecné povinnosti zhotovitele, odst. 2.3., písm. a) Dokumentace, povodňové plány, geodetické práce, body 4., 5.")
+        if request.form.get("neg_kaceni") == "NE":
+            negace.append("čl. 2. Všeobecné povinnosti zhotovitele, odst. 2.3., písm. f) Ostatní podmínky, bod 35")
+        if request.form.get("neg_pruzkum") == "NE":
+            negace.append("čl. 2. Všeobecné povinnosti zhotovitele, odst. 2.3., písm. f) Ostatní podmínky, bod 38")
+        if bz_ne:
+            negace.append("čl. 7. Bankovní záruka")
         if request.form.get("neg_dotace") == "NE":
             negace.append("čl. 14. Odstoupení od smlouvy, odst. 14. 3. a 14. 4.")
 
