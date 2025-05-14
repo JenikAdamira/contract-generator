@@ -112,11 +112,11 @@ def index():
 
         cl_12_pismena = []
         if request.form.get("neg_geom") == "NE":
-            cl_12_pismena.append("c")
+            cl_12_pismena.append("c)")
         if request.form.get("neg_kzp") == "NE":
-            cl_12_pismena.append("e")
+            cl_12_pismena.append("e)")
         if request.form.get("neg_reviz") == "NE":
-            cl_12_pismena.append("m")
+            cl_12_pismena.append("m)")
 
         if cl_12_pismena:
             def spoj_pismena(seznam):
