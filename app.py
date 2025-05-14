@@ -99,12 +99,24 @@ def index():
         # čl. 2 – základní negace
         if request.form.get("neg_geom") == "NE":
             negace.append("čl. 2. Všeobecné povinnosti zhotovitele, odst. 2.3., písm. a) Dokumentace, povodňové plány, geodetické práce, body 4., 5.")
+# čl. 2 – základní negace
+        if request.form.get("neg_geom") == "NE":
+            negace.append("čl. 2. Všeobecné povinnosti zhotovitele, odst. 2.3., písm. a) Dokumentace, povodňové plány, geodetické práce, body 4., 5.")
+
+        cl_2_f_body = []
         if request.form.get("neg_kaceni") == "NE":
-            negace.append("čl. 2. Všeobecné povinnosti zhotovitele, odst. 2.3., písm. f) Ostatní podmínky, bod 35")
+            cl_2_f_body.append("35")
         if request.form.get("neg_pruzkum") == "NE":
-            negace.append("čl. 2. Všeobecné povinnosti zhotovitele, odst. 2.3., písm. f) Ostatní podmínky, bod 38")
+            cl_2_f_body.append("38")
         if request.form.get("neg_kzp") == "NE":
-            negace.append("čl. 2. Všeobecné povinnosti zhotovitele, odst. 2.3., písm. f) Ostatní podmínky, bod 45")
+            cl_2_f_body.append("45")
+        if cl_2_f_body:
+            def spoj_body(b):
+                if len(b) == 1:
+                    return b[0]
+                return ", ".join(b[:-1]) + " a " + b[-1]
+            body_text = spoj_body(cl_2_f_body)
+            negace.append(f"čl. 2. Všeobecné povinnosti zhotovitele, odst. 2.3., písm. f) Ostatní podmínky, body {body_text}")
 
         # čl. 7 – Bankovní záruka
         if bz_ne:
