@@ -212,6 +212,7 @@
         <div id="zobrazene-negace" class="mt-6 bg-gray-50 p-4 border rounded text-sm text-gray-700 space-y-1">
           <strong class="block mb-2 text-gray-800">Bude doplněno do negací:</strong>
           <div id="negace_geom" class="hidden">– čl. 2. Všeobecné povinnosti zhotovitele, odst. 2.3., písm. a) Dokumentace, povodňové plány, geodetické práce, body 4., 5.</div>
+          <div id="negace_geom_predani" class="hidden">– čl. 12. Předání díla, odst. 12.2., písm. c)</div>
           <div id="negace_kaceni" class="hidden">– čl. 2. Všeobecné povinnosti zhotovitele, odst. 2.3., písm. f) Ostatní podmínky, bod 35.</div>
           <div id="negace_pruzkum" class="hidden">– čl. 2. Všeobecné povinnosti zhotovitele, odst. 2.3., písm. f) Ostatní podmínky, bod 38.</div>
           <div id="negace_bz" class="hidden">– čl. 7. Bankovní záruka</div>
@@ -286,6 +287,7 @@
     };
 
     z("negace_geom", document.querySelector('input[name="neg_geom"]:checked')?.value === "NE");
+    z("negace_geom_predani", document.querySelector('input[name="neg_geom"]:checked')?.value === "NE");
     z("negace_kaceni", document.querySelector('input[name="neg_kaceni"]:checked')?.value === "NE");
     z("negace_pruzkum", document.querySelector('input[name="neg_pruzkum"]:checked')?.value === "NE");
     z("negace_dotace", document.querySelector('input[name="neg_dotace"]:checked')?.value === "NE");
