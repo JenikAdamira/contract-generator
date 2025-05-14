@@ -10,23 +10,17 @@ app = Flask(__name__)
 def index():
     if request.method == "POST":
         akce_count = int(request.form["akce_count"])
-        nazvy_akci = []
-        cisla_akci = []
-
-        for i in range(1, akce_count + 1):
-            nazev = request.form.get(f"nazev_akce_{i}")
-            cislo = request.form.get(f"cislo_akce_{i}")
-            if nazev:
-                nazvy_akci.append(nazev)
-            if cislo:
-                cisla_akci.append(cislo)
+        nazvy_akci = [request.form.get(f"nazev_akce_{i}") for i in range(1, akce_count + 1) if request.form.get(f"nazev_akce_{i}")]
+        cisla_akci = [request.form.get(f"cislo_akce_{i}") for i in range(1, akce_count + 1) if request.form.get(f"cislo_akce_{i}")]
 
         verejna_zakazka = request.form.get("verejna_zakazka", "").strip()
 
         if akce_count >= 2 and verejna_zakazka:
             nazev_akce_final = verejna_zakazka
+        elif nazvy_akci:
+            nazev_akce_final = nazvy_akci[0]
         else:
-            nazev_akce_final = nazvy_akci[0] if nazvy_akci else ""
+            nazev_akce_final = ""
 
         cislo_akce_final = ", ".join(cisla_akci)
 
@@ -37,11 +31,7 @@ def index():
                 if cislo and nazev:
                     vice_akci += f"č. {cislo} {nazev}\n"
 
-        seznam_akci = []
-        if akce_count >= 2:
-            for cislo, nazev in zip(cisla_akci, nazvy_akci):
-                if cislo and nazev:
-                    seznam_akci.append({"cislo": cislo, "nazev": nazev})
+        seznam_akci = [{"cislo": cislo, "nazev": nazev} for cislo, nazev in zip(cisla_akci, nazvy_akci) if cislo and nazev and akce_count >= 2]
 
         bz_ne = request.form["bz"] == "NE"
         bz_text = (
@@ -84,30 +74,26 @@ def index():
                     "projektant": projektant,
                     "akce": nazev_akce_final
                 })
-                # Sestavení textu do proměnné {{projekt}} – spojení více PD spojkou "a"
-projekt_parts = []
-for pd in pds:
-    projekt_parts.append(
-        f'{pd["typ"]} vypracovanou v roce {pd["rok"]} společností {pd["spolecnost"]}, se sídlem {pd["sidlo"]}, zodpovědný projektant {pd["projektant"]}'
-    )
-projekt_text = " a ".join(projekt_parts)
 
-    if request.form["dokonceni_typ"] == "datum":
+        projekt_parts = [
+            f'{pd["typ"]} vypracovanou v roce {pd["rok"]} společností {pd["spolecnost"]}, se sídlem {pd["sidlo"]}, zodpovědný projektant {pd["projektant"]}'
+            for pd in pds
+        ]
+        projekt_text = " a ".join(projekt_parts)
+
+        if request.form["dokonceni_typ"] == "datum":
             datum_raw = request.form["dokonceni_datum"]
             try:
                 parsed = datetime.strptime(datum_raw, "%Y-%m-%d")
                 datum_cz = parsed.strftime("%d.%m.%Y")
                 dokonceni = f"nejpozději do {datum_cz}"
-            except:
-                dokonceni = f"nejpozději do {datum_raw}"
+            except ValueError:
+                dokonceni = f"nejpozději do {datum_raw} (chybný formát data)" # Lepší indikace chyby
+                print(f"Chyba při parsování data: {datum_raw}") # Volitelné logování chyby
         else:
             dokonceni = request.form["dokonceni_text"]
 
-        listiny = []
-        for i in range(1, int(request.form["listiny_count"]) + 1):
-            val = request.form.get(f"listina_{i}")
-            if val:
-                listiny.append(val)
+        listiny = [request.form.get(f"listina_{i}") for i in range(1, int(request.form["listiny_count"]) + 1) if request.form.get(f"listina_{i}")]
 
         negace = []
         if request.form.get("neg_geom") == "NE":
