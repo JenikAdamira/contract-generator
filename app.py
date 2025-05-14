@@ -24,7 +24,7 @@ def index():
 
         cislo_akce_final = ", ".join(cisla_akci)
 
-vice_akci = ""
+        vice_akci = ""
         if akce_count >= 2:
             vice_akci = "Tato zakázka se skládá ze dvou níže uvedených jednotlivých akcí:\n"
             for cislo, nazev in zip(cisla_akci, nazvy_akci):
