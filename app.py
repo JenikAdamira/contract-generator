@@ -45,7 +45,7 @@ def index():
 
         bz_ne = request.form["bz"] == "NE"
         bz_text = (
-            "Zhotovitel předložil objednateli..." if not bz_ne else
+            "Zhotovitel předložil objednateli v den podpisu smlouvy o dílo originál bankovní záruky za pro-vedení díla v souladu se zněním čl. 7. Bankovní záruka, odst. 7.1. Obchodních podmínek na zho-tovení stavby ze dne 1. 1. 2024. Objednatel potvrzuje podpisem smlouvy převzetí listiny." if not bz_ne else
             "Objednatel nežádá zhotovitele o předložení bankovní záruky za provedení díla."
         )
 
