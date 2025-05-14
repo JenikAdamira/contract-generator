@@ -35,7 +35,8 @@ def index():
 
         bz_ne = request.form["bz"] == "NE"
         bz_text = (
-            "Zhotovitel předložil objednateli v den podpisu smlouvy o dílo originál bankovní záruky za pro-vedení díla v souladu se zněním čl. 7. Bankovní záruka, odst. 7.1. Obchodních podmínek na zho-tovení stavby ze dne 1. 1. 2024. Objednatel potvrzuje podpisem smlouvy převzetí listiny." if not bz_ne else
+            "Zhotovitel předložil objednateli v den podpisu smlouvy o dílo originál bankovní záruky za provedení díla v souladu se zněním čl. 7. Bankovní záruka, odst. 7.1. Obchodních podmínek na zhotovení stavby ze dne 1. 1. 2024. Objednatel potvrzuje podpisem smlouvy převzetí listiny."
+            if not bz_ne else
             "Objednatel nežádá zhotovitele o předložení bankovní záruky za provedení díla."
         )
 
@@ -95,9 +96,8 @@ def index():
 
         listiny = [request.form.get(f"listina_{i}") for i in range(1, int(request.form["listiny_count"]) + 1) if request.form.get(f"listina_{i}")]
 
-negace = []
+        negace = []
 
-        # čl. 2 – základní negace
         if request.form.get("neg_geom") == "NE":
             negace.append("čl. 2. Všeobecné povinnosti zhotovitele, odst. 2.3., písm. a) Dokumentace, povodňové plány, geodetické práce, body 4., 5.")
         if request.form.get("neg_kaceni") == "NE":
@@ -107,11 +107,9 @@ negace = []
         if request.form.get("neg_kzp") == "NE":
             negace.append("čl. 2. Všeobecné povinnosti zhotovitele, odst. 2.3., písm. f) Ostatní podmínky, bod 45")
 
-        # čl. 7 – Bankovní záruka
         if bz_ne:
             negace.append("čl. 7. Bankovní záruka")
 
-        # čl. 12 – Předání díla, odst. 12.2., písm. ...
         cl_12_pismena = []
         if request.form.get("neg_geom") == "NE":
             cl_12_pismena.append("c")
@@ -128,11 +126,9 @@ negace = []
             pismena_text = spoj_pismena(cl_12_pismena)
             negace.append(f"čl. 12. Předání díla, odst. 12.2., písm. {pismena_text})")
 
-        # čl. 14 – Dotace
         if request.form.get("neg_dotace") == "NE":
             negace.append("čl. 14. Odstoupení od smlouvy, odst. 14. 3. a 14. 4.")
 
-        # vlastní textová pole
         for i in range(1, int(request.form["negace_count"]) + 1):
             val = request.form.get(f"negace_{i}")
             if val:
