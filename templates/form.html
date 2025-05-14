@@ -189,33 +189,43 @@
 
       <!-- Rozšířené otázky s ANO/NE -->
       <div class="mt-4 space-y-4">
+    <div>
+      <label>Geometrické plány</label>
+      <label><input type="radio" name="neg_geom" value="ANO" onchange="zobrazNegace()"> Ano</label>
+      <label><input type="radio" name="neg_geom" value="NE" onchange="zobrazNegace()"> Ne</label>
 
-        <div class="grid grid-cols-3 gap-4 items-center">
-          <label class="text-gray-700">Geometrické plány</label>
-          <label><input type="radio" name="neg_geom" value="ANO" onchange="zobrazNegace()" required> Ano</label>
-          <label><input type="radio" name="neg_geom" value="NE" onchange="zobrazNegace()"> Ne</label>
+      <label>Kácení</label>
+      <label><input type="radio" name="neg_kaceni" value="ANO" onchange="zobrazNegace()"> Ano</label>
+      <label><input type="radio" name="neg_kaceni" value="NE" onchange="zobrazNegace()"> Ne</label>
 
-          <label class="text-gray-700">Kácení</label>
-          <label><input type="radio" name="neg_kaceni" value="ANO" onchange="zobrazNegace()" required> Ano</label>
-          <label><input type="radio" name="neg_kaceni" value="NE" onchange="zobrazNegace()"> Ne</label>
+      <label>Průzkum ZCHDŽ</label>
+      <label><input type="radio" name="neg_pruzkum" value="ANO" onchange="zobrazNegace()"> Ano</label>
+      <label><input type="radio" name="neg_pruzkum" value="NE" onchange="zobrazNegace()"> Ne</label>
 
-          <label class="text-gray-700">Průzkum ZCHDŽ</label>
-          <label><input type="radio" name="neg_pruzkum" value="ANO" onchange="zobrazNegace()" required> Ano</label>
-          <label><input type="radio" name="neg_pruzkum" value="NE" onchange="zobrazNegace()"> Ne</label>
+      <label>Dotace</label>
+      <label><input type="radio" name="neg_dotace" value="ANO" onchange="zobrazNegace()"> Ano</label>
+      <label><input type="radio" name="neg_dotace" value="NE" onchange="zobrazNegace()"> Ne</label>
 
-          <label class="text-gray-700">Dotace</label>
-          <label><input type="radio" name="neg_dotace" value="ANO" onchange="zobrazNegace()" required> Ano</label>
-          <label><input type="radio" name="neg_dotace" value="NE" onchange="zobrazNegace()"> Ne</label>
-        </div>
+      <label>Kontrolní zkušební plán</label>
+      <label><input type="radio" name="neg_kzp" value="ANO" onchange="zobrazNegace()"> Ano</label>
+      <label><input type="radio" name="neg_kzp" value="NE" onchange="zobrazNegace()"> Ne</label>
+
+      <label>Revize</label>
+      <label><input type="radio" name="neg_reviz" value="ANO" onchange="zobrazNegace()"> Ano</label>
+      <label><input type="radio" name="neg_reviz" value="NE" onchange="zobrazNegace()"> Ne</label>
+    </div>
 
         <!-- Dynamické zobrazení negací -->
         <div id="zobrazene-negace" class="mt-6 bg-gray-50 p-4 border rounded text-sm text-gray-700 space-y-1">
           <strong class="block mb-2 text-gray-800">Bude doplněno do negací:</strong>
           <div id="negace_geom" class="hidden">– čl. 2. Všeobecné povinnosti zhotovitele, odst. 2.3., písm. a) Dokumentace, povodňové plány, geodetické práce, body 4., 5.</div>
-          <div id="negace_geom_predani" class="hidden">– čl. 12. Předání díla, odst. 12.2., písm. c)</div>
           <div id="negace_kaceni" class="hidden">– čl. 2. Všeobecné povinnosti zhotovitele, odst. 2.3., písm. f) Ostatní podmínky, bod 35.</div>
           <div id="negace_pruzkum" class="hidden">– čl. 2. Všeobecné povinnosti zhotovitele, odst. 2.3., písm. f) Ostatní podmínky, bod 38.</div>
+          <div id="negace_kzp" class="hidden">– čl. 2. Všeobecné povinnosti zhotovitele, odst. 2.3., písm. f) Ostatní podmínky, bod 45.</div>
           <div id="negace_bz" class="hidden">– čl. 7. Bankovní záruka</div>
+          <div id="negace_geom_predani" class="hidden">– čl. 12. Předání díla, odst. 12.2., písm. c)</div>
+          <div id="negace_kzp_predani" class="hidden">– čl. 12. Předání díla, odst. 12.2., písm. e)</div>
+          <div id="negace_reviz" class="hidden">– čl. 12. Předání díla, odst. 12.2., písm. m)</div>
           <div id="negace_dotace" class="hidden">– čl. 14. Odstoupení od smlouvy, odst. 14.3 a 14.4.</div>
         </div>
         <!-- Textová pole pro vlastní negace -->
@@ -280,21 +290,21 @@
       wrapper.appendChild(textarea);
     }
 
-  function zobrazNegace() {
-    const z = (id, show) => {
-      const el = document.getElementById(id);
-      if (el) el.classList.toggle("hidden", !show);
-    };
-
-    z("negace_geom", document.querySelector('input[name="neg_geom"]:checked')?.value === "NE");
-    z("negace_geom_predani", document.querySelector('input[name="neg_geom"]:checked')?.value === "NE");
-    z("negace_kaceni", document.querySelector('input[name="neg_kaceni"]:checked')?.value === "NE");
-    z("negace_pruzkum", document.querySelector('input[name="neg_pruzkum"]:checked')?.value === "NE");
-    z("negace_dotace", document.querySelector('input[name="neg_dotace"]:checked')?.value === "NE");
-
-    const bz = document.getElementById("bz")?.value;
-    z("negace_bz", bz === "NE");
-  }
+    function zobrazNegace() {
+      const z = (id, show) => {
+        const el = document.getElementById(id);
+        if (el) el.classList.toggle("hidden", !show);
+      };
+      z("negace_geom", document.querySelector('input[name="neg_geom"]:checked')?.value === "NE");
+      z("negace_geom_predani", document.querySelector('input[name="neg_geom"]:checked')?.value === "NE");
+      z("negace_kaceni", document.querySelector('input[name="neg_kaceni"]:checked')?.value === "NE");
+      z("negace_pruzkum", document.querySelector('input[name="neg_pruzkum"]:checked')?.value === "NE");
+      z("negace_bz", document.getElementById("bz")?.value === "NE");
+      z("negace_dotace", document.querySelector('input[name="neg_dotace"]:checked')?.value === "NE");
+      z("negace_kzp", document.querySelector('input[name="neg_kzp"]:checked')?.value === "NE");
+      z("negace_kzp_predani", document.querySelector('input[name="neg_kzp"]:checked')?.value === "NE");
+      z("negace_reviz", document.querySelector('input[name="neg_reviz"]:checked')?.value === "NE");
+    }
 
   document.addEventListener("DOMContentLoaded", zobrazNegace);
 
