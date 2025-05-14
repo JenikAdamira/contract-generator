@@ -118,13 +118,21 @@ def index():
         if request.form.get("neg_reviz") == "NE":
             cl_12_pismena.append("m)")
 
+cl_12_pismena = []
+        if request.form.get("neg_geom") == "NE":
+            cl_12_pismena.append("c)")
+        if request.form.get("neg_kzp") == "NE":
+            cl_12_pismena.append("e)")
+        if request.form.get("neg_reviz") == "NE":
+            cl_12_pismena.append("m)")
+
         if cl_12_pismena:
             def spoj_pismena(seznam):
                 if len(seznam) == 1:
                     return seznam[0]
                 return ", ".join(seznam[:-1]) + " a " + seznam[-1]
             pismena_text = spoj_pismena(cl_12_pismena)
-            negace.append(f"čl. 12. Předání díla, odst. 12.2., písm. {pismena_text})")
+            negace.append(f"čl. 12. Předání díla, odst. 12.2., písm. {pismena_text}")
 
         if request.form.get("neg_dotace") == "NE":
             negace.append("čl. 14. Odstoupení od smlouvy, odst. 14. 3. a 14. 4.")
