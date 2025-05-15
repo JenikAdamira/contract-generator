@@ -86,17 +86,15 @@ def index():
         else:
             dokonceni = request.form["dokonceni_text"]
 
-            kaceni_text = ""  # Inicializace proměnné pro text o kácení
-    if request.form.get("neg_kaceni") == "ANO":
-        # Uživatel NEchce negaci (kácení se provádí) - vložíme text
-        kaceni_text = """
+
+        if request.form.get("neg_kaceni") == "ANO":
+            kaceni_text = """
 Zhotovitel se zavazuje k odkupu veškeré přebytečné dřevní hmoty v majetku objednatele vzniklé během realizace stavby a k jejímu vymístění mimo stavbu. Jedná se o přebytečné kmeny, křoví a větve z odstraňovaných stromů i keřů, pro které není dle projektové dokumentace jiné využití v místě stavby.
 
 Cenu za odkup dřevní hmoty zhotovitel adekvátně ponížil o veškeré doprovodné náklady spojené s vymístěním dřevní hmoty ze stavby. Cenu za odkup zhotovitel vyjádřil adekvátním oceněním příslušné položky v objektu SO 2.7.1 - Oprava opevnění „Zisk objednatele za odkup přebytečné dřevní hmoty zhotovitelem“ v soupisu prací stavby.
-        """
-    else:
-        # Uživatel CHCE negaci (kácení se NEprovádí) - vymažeme odstavec
-        kaceni_text = "Odstavec vymazat"
+            """
+        else:
+            kaceni_text = "Odstavec vymazat"
 
         listiny = [request.form.get(f"listina_{i}") for i in range(1, int(request.form["listiny_count"]) + 1) if request.form.get(f"listina_{i}")]
 
