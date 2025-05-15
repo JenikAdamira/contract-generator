@@ -28,7 +28,7 @@ def index():
 
         bz_ne = request.form["bz"] == "NE"
         bz_text = (
-            "Zhotovitel předložil objednateli v den podpisu smlouvy o dílo originál bankovní záruky za provedení díla v souladu se zněním čl. 7. Bankovní záruka, odst. 7.1. Obchodních podmínek na zhotovení stavby ze dne 1. 1. 2024. Objednatel potvrzuje podpisem smlouvy převzetí listiny."
+            "Zhotovitel předložil objednateli v den podpisu smlouvy o dílo originál bankovní záruky za provedení díla..."
             if not bz_ne else
             "Objednatel nežádá zhotovitele o předložení bankovní záruky za provedení díla."
         )
@@ -50,32 +50,32 @@ def index():
             "provadeci": "projektovou dokumentací pro provedení stavby"
         }
 
-pds = []
-pd_count = int(request.form.get("pd_count", 1))
-for i in range(1, pd_count + 1):
-    if i == 1:
-        typ = request.form.get("pd")
-        rok = request.form.get("pdrok")
-        spolecnost = request.form.get("pdspolecnost")
-        sidlo = request.form.get("pdsidlo")
-        projektant = request.form.get("pdproj")
-    else:
-        typ = request.form.get(f"pd_{i}")
-        rok = request.form.get(f"pdrok_{i}")
-        spolecnost = request.form.get(f"pdspolecnost_{i}")
-        sidlo = request.form.get(f"pdsidlo_{i}")
-        projektant = request.form.get(f"pdproj_{i}")
+        pds = []
+        pd_count = int(request.form.get("pd_count", 1))
+        for i in range(1, pd_count + 1):
+            if i == 1:
+                typ = request.form.get("pd")
+                rok = request.form.get("pdrok")
+                spolecnost = request.form.get("pdspolecnost")
+                sidlo = request.form.get("pdsidlo")
+                projektant = request.form.get("pdproj")
+            else:
+                typ = request.form.get(f"pd_{i}")
+                rok = request.form.get(f"pdrok_{i}")
+                spolecnost = request.form.get(f"pdspolecnost_{i}")
+                sidlo = request.form.get(f"pdsidlo_{i}")
+                projektant = request.form.get(f"pdproj_{i}")
 
-    pd_typ_text = pd_map.get(typ, "")
-    if all([pd_typ_text, rok, spolecnost, sidlo, projektant]):
-        pds.append({
-            "typ": pd_typ_text,
-            "rok": rok,
-            "spolecnost": spolecnost,
-            "sidlo": sidlo,
-            "projektant": projektant,
-            "akce": nazev_akce_final
-        })
+            pd_typ_text = pd_map.get(typ, "")
+            if all([pd_typ_text, rok, spolecnost, sidlo, projektant]):
+                pds.append({
+                    "typ": pd_typ_text,
+                    "rok": rok,
+                    "spolecnost": spolecnost,
+                    "sidlo": sidlo,
+                    "projektant": projektant,
+                    "akce": nazev_akce_final
+                })
 
         projekt_parts = [
             f'{pd["typ"]} vypracovanou v roce {pd["rok"]} společností {pd["spolecnost"]}, se sídlem {pd["sidlo"]}, zodpovědný projektant {pd["projektant"]}'
@@ -94,13 +94,8 @@ for i in range(1, pd_count + 1):
         else:
             dokonceni = request.form["dokonceni_text"]
 
-
         if request.form.get("neg_kaceni") == "ANO":
-            kaceni_text = """
-Zhotovitel se zavazuje k odkupu veškeré přebytečné dřevní hmoty v majetku objednatele vzniklé během realizace stavby a k jejímu vymístění mimo stavbu. Jedná se o přebytečné kmeny, křoví a větve z odstraňovaných stromů i keřů, pro které není dle projektové dokumentace jiné využití v místě stavby.
-
-Cenu za odkup dřevní hmoty zhotovitel adekvátně ponížil o veškeré doprovodné náklady spojené s vymístěním dřevní hmoty ze stavby. Cenu za odkup zhotovitel vyjádřil adekvátním oceněním příslušné položky v objektu SO 2.7.1 - Oprava opevnění „Zisk objednatele za odkup přebytečné dřevní hmoty zhotovitelem“ v soupisu prací stavby.
-            """
+            kaceni_text = """Zhotovitel se zavazuje k odkupu veškeré přebytečné dřevní hmoty..."""
         else:
             kaceni_text = "Odstavec vymazat"
 
@@ -108,8 +103,7 @@ Cenu za odkup dřevní hmoty zhotovitel adekvátně ponížil o veškeré doprov
 
         negace = []
         if request.form.get("neg_geom") == "NE":
-            negace.append("čl. 2. Všeobecné povinnosti zhotovitele, odst. 2.3., písm. a) Dokumentace, povodňové plány, geodetické práce, body 4., 5.")
-
+            negace.append("čl. 2... písm. a)... body 4., 5.")
         cl_2_f_body = []
         if request.form.get("neg_kaceni") == "NE":
             cl_2_f_body.append("35")
@@ -122,8 +116,7 @@ Cenu za odkup dřevní hmoty zhotovitel adekvátně ponížil o veškeré doprov
                 if len(b) == 1:
                     return b[0]
                 return ", ".join(b[:-1]) + " a " + b[-1]
-            body_text = spoj_body(cl_2_f_body)
-            negace.append(f"čl. 2. Všeobecné povinnosti zhotovitele, odst. 2.3., písm. f) Ostatní podmínky, body {body_text}")
+            negace.append(f"čl. 2... písm. f)... body {spoj_body(cl_2_f_body)}")
 
         if bz_ne:
             negace.append("čl. 7. Bankovní záruka")
@@ -140,11 +133,10 @@ Cenu za odkup dřevní hmoty zhotovitel adekvátně ponížil o veškeré doprov
                 if len(seznam) == 1:
                     return seznam[0]
                 return ", ".join(seznam[:-1]) + " a " + seznam[-1]
-            pismena_text = spoj_pismena(cl_12_pismena)
-            negace.append(f"čl. 12. Předání díla, odst. 12.2., písm. {pismena_text}")
+            negace.append(f"čl. 12... písm. {spoj_pismena(cl_12_pismena)}")
 
         if request.form.get("neg_dotace") == "NE":
-            negace.append("čl. 14. Odstoupení od smlouvy, odst. 14. 3. a 14. 4.")
+            negace.append("čl. 14... odst. 14.3 a 14.4")
 
         for i in range(1, int(request.form["negace_count"]) + 1):
             val = request.form.get(f"negace_{i}")
