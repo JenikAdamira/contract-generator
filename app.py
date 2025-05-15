@@ -28,7 +28,7 @@ def index():
 
         bz_ne = request.form["bz"] == "NE"
         bz_text = (
-            "Zhotovitel předložil objednateli v den podpisu smlouvy o dílo originál bankovní záruky za provedení díla..."
+            "Zhotovitel předložil objednateli v den podpisu smlouvy o dílo originál bankovní záruky za prove-dení díla podle ustanovení čl. 7 Bankovní záruka, odst. 7.1. Obchodních podmínek objednatele na zhotovení stavby ze dne 1. 1. 2024. Objednatel potvrzuje podpisem smlouvy převzetí listiny."
             if not bz_ne else
             "Objednatel nežádá zhotovitele o předložení bankovní záruky za provedení díla."
         )
@@ -38,10 +38,10 @@ def index():
         vz1 = ""
         vz2 = ""
         if request.form["vyh"] == "ANO":
-            vyh_text = "Smluvní strany se dohodly na vyhrazené změně závazku..."
+            vyh_text = "Smluvní strany se dohodly na vyhrazené změně závazku v souladu s ustanovením § 100 odst. 1 a § 222 odst. 2 zákona č. 134/2016 Sb., o zadávání veřejných zakázek, ve znění pozdějších předpisů, spočívající v tom, že pokud u položek uvedených v tabulce „Souhrn vyhrazených položek“ dojde k naměření jiného množství, než bylo předpokládáno výkazem výměr, platí pro účely fakturace naměřená hodnota, avšak maximálně do výše limitů stanovených jako 50 % víceprací a 50 % méněprací v rámci všech podle tohoto dokumentu označených položek výkazu výměr. Měření musí být evidováno ve formě Evidenčního listu vyhrazené změny, což je samostatný dokument obsahující přehled skutečně naměřených množství jednotlivých položek výkazu výměr, pokud se liší od původního předpokladu, přičemž vyhrazené změny lze uplatnit pouze v souladu s uvedenými limity."
             vyh_placeholder = "Do vygenerované smlouvy vlož Souhrn vyhrazených položek"
-            vz1 = "(překročitelná jen při uplatnění vyhrazených změn...)"
-            vz2 = "(jedná se o cenu díla před aktivací změn...)"
+            vz1 = "(překročitelná jen při uplatnění vyhrazených změn v čl. 8.10. smlouvy a dále v režimu zákona)"
+            vz2 = "(jedná se o cenu díla před aktivací změn vyhrazených v čl. 8.10. smlouvy)"
         else:
             vyh_text = "Vymaž tento odstavec"
 
@@ -95,7 +95,9 @@ def index():
             dokonceni = request.form["dokonceni_text"]
 
         if request.form.get("neg_kaceni") == "ANO":
-            kaceni_text = """Zhotovitel se zavazuje k odkupu veškeré přebytečné dřevní hmoty..."""
+            kaceni_text = """Zhotovitel se zavazuje k odkupu veškeré přebytečné dřevní hmoty v majetku objednatele vzniklé během realizace stavby a k jejímu vymístění mimo stavbu. Jedná se o přebytečné kmeny, křoví a větve z odstraňovaných stromů i keřů, pro které není dle projektové dokumentace jiné využití v místě stavby.""" 
+"""Cenu za odkup dřevní hmoty zhotovitel adekvátně ponížil o veškeré doprovodné náklady spojené s vymístěním dřevní hmoty ze stavby. Cenu za odkup zhotovitel vyjádřil adekvátním oceněním příslušné položky v objektu SO 2.7.1 - Oprava opevnění „Zisk objednatele za odkup přebytečné dřevní hmoty zhotovitelem“ v soupisu prací stavby.  
+"""
         else:
             kaceni_text = "Odstavec vymazat"
 
