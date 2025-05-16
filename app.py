@@ -119,7 +119,7 @@ def index():
                 if len(b) == 1:
                     return b[0]
                 return ", ".join(b[:-1]) + " a " + b[-1]
-            negace.append(f"čl. 2... písm. f)... body {spoj_body(cl_2_f_body)}")
+            negace.append(f"čl. 2. Všeobecné povinnosti zhotovitele, odst. 2.3., písm. f) Ostatní podmínky, body {spoj_body(cl_2_f_body)}")
 
         if bz_ne:
             negace.append("čl. 7. Bankovní záruka")
@@ -136,10 +136,10 @@ def index():
                 if len(seznam) == 1:
                     return seznam[0]
                 return ", ".join(seznam[:-1]) + " a " + seznam[-1]
-            negace.append(f"čl. 12... písm. {spoj_pismena(cl_12_pismena)}")
+            negace.append(f"čl. 12. Předání díla, odst. 12.2., písm. {spoj_pismena(cl_12_pismena)}")
 
         if request.form.get("neg_dotace") == "NE":
-            negace.append("čl. 14... odst. 14.3 a 14.4")
+            negace.append("čl. 14. Odstoupení od smlouvy, odst. 14.3 a 14.4")
 
         for i in range(1, int(request.form["negace_count"]) + 1):
             val = request.form.get(f"negace_{i}")
